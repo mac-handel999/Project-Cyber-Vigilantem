@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "axios": "^1.16.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "name": "project-cyber-vigilantem",
+  "version": "1.0.0",
+  "description": "Welcome to the **PROJECT CYBER VIGILAN-TEEM** repository\\! 🛡️ This project is a streamlined, core-functionality showcase of our upcoming platform, built with foundational web technologies.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mac-handel999/Project-Cyber-Vigilantem.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mac-handel999/Project-Cyber-Vigilantem/issues"
+  },
+  "homepage": "https://github.com/mac-handel999/Project-Cyber-Vigilantem#readme"
+}
