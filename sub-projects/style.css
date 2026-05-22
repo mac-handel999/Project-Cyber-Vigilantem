@@ -1,0 +1,151 @@
+:root {
+    --primary-color: #800020;
+    /* Deep Ox-blood */
+    --primary-dark: #4a0012;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    /* Slight transparency to let the background peak through */
+    --text-color: #333333;
+    --border-color: #dddddd;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* 1. Body Background Styles (Using your exact HERO image settings) */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('/Images/HERO.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Pushes the footer to the absolute bottom */
+}
+
+/* 2. Header & Footer (Using your exact layout and gradient brush) */
+.header,
+.footer {
+    background-image: linear-gradient(40deg, blue, black);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 20px;
+    color: #ffffff;
+    /* Ensures text is highly visible over blue/black */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* 3. Centralized Dashboard Layout Adjustment */
+.dashboard-container {
+    max-width: 700px;
+    width: 90%;
+    margin: 40px auto;
+    /* Centers the card perfectly between header and footer */
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Navigation Tabs inside Dashboard Card */
+.tab-navigation {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 25px;
+    gap: 15px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #666;
+    border-bottom: 3px solid transparent; 
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* Content Block Display Switches */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Input Fields & Buttons */
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+
+}
+
+input:focus {
+    border-color: var(--primary-color);
+}
+
+.action-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.action-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Dynamic Notification Outputs */
+.result-box {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    display: none;
+    font-size: 15px;
+    line-height: 1.5;
+}

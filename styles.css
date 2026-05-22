@@ -6,9 +6,13 @@
 
 }
 
-body {
-background-image: url('/Images/HERO.png');
+html {
+    scroll-behavior: smooth;
+}
 
+body {
+    background-image: url('/Images/background-img.png');
+    /* background-image: linear-gradient( 40deg, #050a05, #00f0ff); */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
