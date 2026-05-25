@@ -85,96 +85,96 @@ document.getElementById('urlCheckBtn').addEventListener('click', async () => {
     }
 });
 
-// ==========================================
-// 2. Identity Guard Logic (With Format Checker)
-// ==========================================
-document.getElementById('emailCheckBtn').addEventListener('click', async () => {
-    const emailInput = document.getElementById('emailInput').value.trim();
-    const resultDiv = document.getElementById('emailResultContainer');
+// // ==========================================
+// // 2. Identity Guard Logic (With Format Checker)
+// // ==========================================
+// document.getElementById('emailCheckBtn').addEventListener('click', async () => {
+//     const emailInput = document.getElementById('emailInput').value.trim();
+//     const resultDiv = document.getElementById('emailResultContainer');
 
-    if (!emailInput) {
-        alert("Please enter an email address.");
-        return;
-    }
+//     if (!emailInput) {
+//         alert("Please enter an email address.");
+//         return;
+//     }
 
-    // FORMAT VALIDATION CHECK
-    if (!isValidEmail(emailInput)) {
-        resultDiv.style.display = 'block';
-        resultDiv.style.backgroundColor = '#fff3cd'; // Yellow warning box
-        resultDiv.style.color = '#856404';
-        resultDiv.innerHTML = "<strong>Invalid Format:</strong> Please provide a valid email address (e.g., name@domain.com).";
-        return; // Stops execution before calling backend
-    }
+//     // FORMAT VALIDATION CHECK
+//     if (!isValidEmail(emailInput)) {
+//         resultDiv.style.display = 'block';
+//         resultDiv.style.backgroundColor = '#fff3cd'; // Yellow warning box
+//         resultDiv.style.color = '#856404';
+//         resultDiv.innerHTML = "<strong>Invalid Format:</strong> Please provide a valid email address (e.g., name@domain.com).";
+//         return; // Stops execution before calling backend
+//     }
 
-    resultDiv.style.display = 'block';
-    resultDiv.style.backgroundColor = '#e2e3e5';
-    resultDiv.style.color = '#383d41';
-    resultDiv.innerHTML = "Scanning breach dumps...";
+//     resultDiv.style.display = 'block';
+//     resultDiv.style.backgroundColor = '#e2e3e5';
+//     resultDiv.style.color = '#383d41';
+//     resultDiv.innerHTML = "Scanning breach dumps...";
 
-    try {
-        const res = await fetch(`${BACKEND_URL}/check-email-breach`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ emailToCheck: emailInput })
-        });
-        const data = await res.json();
+//     try {
+//         const res = await fetch(`${BACKEND_URL}/check-email-breach`, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ emailToCheck: emailInput })
+//         });
+//         const data = await res.json();
 
-        if (data.breached) {
-            resultDiv.style.backgroundColor = '#f8d7da';
-            resultDiv.style.color = '#721c24';
-            const leaks = data.breaches.map(b => `<li>${b.Title}</li>`).join('');
-            resultDiv.innerHTML = `<strong>Exposed!</strong> Email found in compromises: <ul>${leaks}</ul>`;
-        } else {
-            resultDiv.style.backgroundColor = '#d4edda';
-            resultDiv.style.color = '#155724';
-            resultDiv.innerHTML = `<strong>Secure:</strong> Identity records appear uncompromised.`;
-        }
-    } catch (err) {
-        resultDiv.innerHTML = "Error contacting backend endpoint.";
-    }
-});
+//         if (data.breached) {
+//             resultDiv.style.backgroundColor = '#f8d7da';
+//             resultDiv.style.color = '#721c24';
+//             const leaks = data.breaches.map(b => `<li>${b.Title}</li>`).join('');
+//             resultDiv.innerHTML = `<strong>Exposed!</strong> Email found in compromises: <ul>${leaks}</ul>`;
+//         } else {
+//             resultDiv.style.backgroundColor = '#d4edda';
+//             resultDiv.style.color = '#155724';
+//             resultDiv.innerHTML = `<strong>Secure:</strong> Identity records appear uncompromised.`;
+//         }
+//     } catch (err) {
+//         resultDiv.innerHTML = "Error contacting backend endpoint.";
+//     }
+// });
 
-// ==========================================
-// 3. Vulnerability Radar Logic (Pentester.com)
-// ==========================================
-document.getElementById('domainCheckBtn').addEventListener('click', async () => {
-    const domainInput = document.getElementById('domainInput').value.trim();
-    const resultDiv = document.getElementById('domainResultContainer');
+// // ==========================================
+// // 3. Vulnerability Radar Logic (Pentester.com)
+// // ==========================================
+// document.getElementById('domainCheckBtn').addEventListener('click', async () => {
+//     const domainInput = document.getElementById('domainInput').value.trim();
+//     const resultDiv = document.getElementById('domainResultContainer');
 
-    if (!domainInput) {
-        alert("Please enter a domain.");
-        return;
-    }
+//     if (!domainInput) {
+//         alert("Please enter a domain.");
+//         return;
+//     }
 
-    // Reuse URL validator to ensure domain pattern looks accurate
-    if (!isValidURL(domainInput)) {
-        resultDiv.style.display = 'block';
-        resultDiv.style.backgroundColor = '#fff3cd';
-        resultDiv.style.color = '#856404';
-        resultDiv.innerHTML = "<strong>Invalid Domain:</strong> Please enter a proper domain root name (e.g., targetcompany.com).";
-        return;
-    }
+//     // Reuse URL validator to ensure domain pattern looks accurate
+//     if (!isValidURL(domainInput)) {
+//         resultDiv.style.display = 'block';
+//         resultDiv.style.backgroundColor = '#fff3cd';
+//         resultDiv.style.color = '#856404';
+//         resultDiv.innerHTML = "<strong>Invalid Domain:</strong> Please enter a proper domain root name (e.g., targetcompany.com).";
+//         return;
+//     }
 
-    resultDiv.style.display = 'block';
-    resultDiv.style.backgroundColor = '#e2e3e5';
-    resultDiv.style.color = '#383d41';
-    resultDiv.innerHTML = "Initiating remote security configuration scan...";
+//     resultDiv.style.display = 'block';
+//     resultDiv.style.backgroundColor = '#e2e3e5';
+//     resultDiv.style.color = '#383d41';
+//     resultDiv.innerHTML = "Initiating remote security configuration scan...";
 
-    try {
-        const res = await fetch(`${BACKEND_URL}/scan-domain`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ domainToScan: domainInput })
-        });
-        const data = await res.json();
+//     try {
+//         const res = await fetch(`${BACKEND_URL}/scan-domain`, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ domainToScan: domainInput })
+//         });
+//         const data = await res.json();
 
-        if (data.success) {
-            resultDiv.style.backgroundColor = '#d1ecf1';
-            resultDiv.style.color = '#0c5460';
-            resultDiv.innerHTML = `<strong>Audit Complete:</strong> Scan routine executed successfully. View raw console data payload for indicators.`;
-            console.log("Pentester Scan Data:", data.scanData);
-        }
-    } catch (err) {
-        resultDiv.innerHTML = "Error launching vulnerability audit framework.";
-    }
-});
+//         if (data.success) {
+//             resultDiv.style.backgroundColor = '#d1ecf1';
+//             resultDiv.style.color = '#0c5460';
+//             resultDiv.innerHTML = `<strong>Audit Complete:</strong> Scan routine executed successfully. View raw console data payload for indicators.`;
+//             console.log("Pentester Scan Data:", data.scanData);
+//         }
+//     } catch (err) {
+//         resultDiv.innerHTML = "Error launching vulnerability audit framework.";
+//     }
+// });
