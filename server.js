@@ -67,3 +67,17 @@ app.post('/api/scan-domain', async (req, res) => {
         res.status(500).json({ error: "Failed to initiate vulnerability scan" });
     }
 });
+
+
+//for vercel deployment, make sure to set the environment variables (GOOGLE_SAFE_BROWSING_KEY and PENTESTER_API
+
+// ... Your existing express routes, axios setup, and middleware ...
+
+// Keep your local listening port block for testing, but add the export line:
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Local server running on port ${PORT}`));
+}
+
+// CRUCIAL FOR VERCEL: Export the app module
+module.exports = app;

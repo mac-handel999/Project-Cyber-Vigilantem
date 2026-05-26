@@ -1,4 +1,7 @@
 const API_URL = 'http://localhost:5000/api/check-url';
+// Automatically points to your current hosted Vercel domain path
+const BACKEND_URL = '/api/check-url';
+
 
 // 1. New Helper Function to validate URLs
 function isValidURL(string) {
