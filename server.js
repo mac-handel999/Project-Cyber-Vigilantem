@@ -1,83 +1,59 @@
-  require('dotenv').config();
 const express = require('express');
-const axios = require('axios');
 const cors = require('cors');
+const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
-app.use(express.json());
-app.use(cors()); // Allows your frontend to talk to this server
 
+// Middleware Ordering
+app.use(express.json());
+
+app.use(cors({
+    origin: [
+        'http://localhost:5000', 
+        'http://localhost:6700', 
+        'http://127.0.0.1:5000', 
+        'http://127.0.0.1:6700',
+        'http://localhost:5500',
+        'http://127.0.0.1:5500'
+    ]
+        
+}));
+
+// Main Safe Browsing API Route
 app.post('/api/check-url', async (req, res) => {
     const { urlToCheck } = req.body;
     const API_KEY = process.env.GOOGLE_SAFE_BROWSING_KEY;
-    const GOOGLE_URL = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${API_KEY}`;
+
+    if (!urlToCheck) {
+        return res.status(400).json({ error: "URL is required" });
+    }
+
+    const targetUrl = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${API_KEY}`;
+
+    const requestBody = {
+        client: { clientId: "project-cyber-vigilanteem", clientVersion: "1.0.0" },
+        threatInfo: {
+            threatTypes: ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
+            platformTypes: ["ANY_PLATFORM"],
+            threatEntryTypes: ["URL"],
+            threatEntries: [{ url: urlToCheck }]
+        }
+    };
 
     try {
-        const response = await axios.post(GOOGLE_URL, {
-            client: { clientId: "my-app", clientVersion: "1.0.0" },
-            threatInfo: {
-                threatTypes: ["MALWARE", "SOCIAL_ENGINEERING"],
-                platformTypes: ["ANY_PLATFORM"],
-                threatEntryTypes: ["URL"],
-                threatEntries: [{ url: urlToCheck }]
-            }
-        });
+        const response = await axios.post(targetUrl, requestBody);
         res.json(response.data);
     } catch (error) {
-        res.status(500).json({ error: "Failed to fetch from Google" });
+        console.error("Google API Hook Error:", error.message);
+        res.status(500).json({ error: "Failed to connect to Google validation registry" });
     }
 });
 
-app.listen(5000, () => console.log('Server running on port 5000'));
-
-
-
-//for testing purposes only, you can run this server with `node server.js` and it will listen on port 5000. Make sure to replace the API key in your .env file with your actual Google Safe Browsing API key.
-
-//for testing, you can use a known malicious URL like "http://malware.testing.google.test/testing/malware/" to see if the API correctly identifies it as unsafe.
-
-//for pentester.com and HIBP, you would create similar endpoints that use their respective API keys and endpoints to check for breaches or vulnerabilities related to the URL or domain.
-
-// Add this inside your existing server.js file
-
-app.post('/api/scan-domain', async (req, res) => {
-    const { domainToScan } = req.body;
-    const PENTESTER_KEY = process.env.PENTESTER_API_KEY;
-
-    if (!domainToScan) {
-        return res.status(400).json({ error: "Domain name is required" });
-    }
-
-    try {
-        // Calling Pentester.com's automated scan api
-        const response = await axios.post('https://api.pentester.com/v1/scans', {
-            target: domainToScan
-        }, {
-            headers: {
-                'Authorization': `Bearer ${PENTESTER_KEY}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        // Send the vulnerability summary data back to your frontend
-        res.json({ success: true, scanData: response.data });
-
-    } catch (error) {
-        console.error("Pentester.com API Error:", error.message);
-        res.status(500).json({ error: "Failed to initiate vulnerability scan" });
-    }
+// Runtime Listener
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`[Project Cyber Vigilan-teem Engine] Environment active across local routing matrix on port ${PORT}`);
 });
 
-
-//for vercel deployment, make sure to set the environment variables (GOOGLE_SAFE_BROWSING_KEY and PENTESTER_API
-
-// ... Your existing express routes, axios setup, and middleware ...
-
-// Keep your local listening port block for testing, but add the export line:
-if (process.env.NODE_ENV !== 'production') {
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => console.log(`Local server running on port ${PORT}`));
-}
-
-// CRUCIAL FOR VERCEL: Export the app module
 module.exports = app;

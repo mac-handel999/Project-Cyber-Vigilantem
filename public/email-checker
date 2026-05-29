@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -37,7 +37,7 @@
              </div> -->
 
 
-        </div>
+        <!-- </div>
         </div>
 
         <div class="dropdown">
@@ -57,12 +57,14 @@
     <div class="hero-section">
         <div class="hero-content">
             <h3>Safe E-Mail checker</h3>
-            <small>A web application that allows users to check the safety of E-Mail addresses by analyzing them for potential
+            <h4>A web application that allows users to check the safety of E-Mail addresses by analyzing them for potential
                 threats, data breaches, and
-                providing feedback on their security status.</small>
+                providing feedback on their security status.</h4>
         </div>
-    </div>
+    </div><br>
 
+
+    <br>
 
     <div class="input-section">
         <div class="input">
@@ -80,10 +82,12 @@
         <div class="results">
             <div id="resultContainer" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; display: none;">
                 <!-- Results will appear here -->
-            </div>
+            <!-- </div>
         </div><br>
 
         <div class="footer">
+            <small>Disclaimer: This E-Mail checker is intended for educational purposes only. It should not be used for any illegal or unethical activities. Always respect privacy and use this tool responsibly.</small>
+            <br><br>
             <small>&copy; 2026 Project Cyber Vigilan-Teem | All rights reserved.</small>
         </div>
     </div>
@@ -91,4 +95,4 @@
     <script src="main.js"></script>
 </body>
 
-</html>
+</html> --> --> -->
