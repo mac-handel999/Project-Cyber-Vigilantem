@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="Images\Project Cyber Vigilan-Teem logo.jpg ">
     <title>Project Cyber Vteem/url-checker</title>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -44,11 +46,11 @@
 
     <div class="input-section">
         <div class="input">
-        <input type="text" id="input-bar" placeholder="Enter URL ">
+        <input type="text" id="input-bar" placeholder="Enter URL "  data-aos="fade-right" data-aos-duration="3000">
         
 
 
-        <button id="search-btn">
+        <button id="search-btn"  data-aos="fade-left" data-aos-duration="3000">
         <i class="fas fa-search"></i> 
         </button>
        </div>
@@ -62,9 +64,16 @@
         </div><br>
         </div>
     </div>
+
+   
         <div class="footer">
 
-            <small>PRODUCT OF : {FABIAN CODES HQ} || fabikechukwuemeana@gmail.com</small> <br>
+            <div class="description-section">
+                <h3 style="color: red; font-weight: bold;">N/B: FOR BAD URL TEST USE => http://malware.testing.google.test/testing/malware/</h3>
+            </div> <br>
+
+            <br>
+            <h3>PRODUCT OF : {FABIAN CODES HQ} || fabikechukwuemeana@gmail.com</h3> <br>
 
             <br>
             <small>&copy; 2026 Project Cyber Vigilan-Teem | All rights reserved.</small>
@@ -72,5 +81,11 @@
     
 
     <script src="main.js"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+        <script>
+        AOS.init();
+        </script>
 </body>
 </html>
