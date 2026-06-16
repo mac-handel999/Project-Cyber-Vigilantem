@@ -6,6 +6,37 @@
 
 }
 
+
+body {
+    background-color: #0d1117;
+    /* Deep Base */
+    color: #c9d1d9;
+    /* Readable Text */
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.container {
+    background-color: #161b22;
+    /* Graphite Grey */
+    border: 1px solid #30363d;
+}
+
+button {
+    background-color: #238636;
+    /* Success Green */
+    color: #ffffff;
+}
+
+/* Add this for a "Cyber-glow" effect on inputs */
+input:focus {
+    outline: none;
+    border: 1px solid #58a6ff;
+    /* Cyber Electric */
+    box-shadow: 0 0 5px #58a6ff;
+}
+
+
+
 html {
     scroll-behavior: smooth;
 }
@@ -21,7 +52,7 @@ body {
 }
 
 .header {
-     background-image: linear-gradient( 40deg,blue,black) ;
+    background-color: #0d1117;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -36,12 +67,11 @@ body {
 }
 
 .logo-img {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     margin : 10px;
     padding: 0px;
-    border-radius: 60px;
-    border: 2px solid #fff;
+   
 
 }
 
@@ -85,26 +115,27 @@ font-weight: bold;
 }
 
 .dropdown {
-    background-image: linear-gradient(40deg, blue, black);
- background-repeat: no-repeat;
-    margin: 10px;
+   
+    background-color: #0d1117;
+    color: #fff;
+    margin: 0px;
     padding: 10px;
-    /* position: relative; */
-    /* display: flex;
-    align-items: center;
-    justify-content: space-evenly; */
+   
     font-weight: bold;
-    border-radius: 10px;
     text-align: center;
     text-shadow: 2px 2px 2px #fff;
-    
-    
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    column-gap: 20px;
+
 
 }
 
 .hero-section {
     padding-top: 10px;
    padding: 5px;
+   margin: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -122,7 +153,7 @@ font-weight: bold;
     border-radius: 20px;
     box-shadow: 0 4px 8px black;
     max-width: 600%;
-    color: #333;
+    color: #fff;
     font-size: 1rem;
     text-shadow: 1px 1px 2px black;
 }
@@ -130,18 +161,51 @@ font-weight: bold;
 .hero-content h3 {
     font-size: 1.5rem;
     margin-bottom: 10px;
-    color: blue;
+    color: #58a6ff;
     text-shadow: 1px 1px 2px #fff;
 }
 
-.hero-button {
-    background-color: #fff;
-    color: blue;
-    padding: 10px 20px;
-    border: 2px solid blue;
-    border-radius: 10px;
-    font-weight: bold;
-} 
+.hero-section {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    color: #58a6ff;
+    margin-bottom: 10px;
+}
+
+.features-grid {
+    display: grid;
+    grid-wrap: wrap;
+    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
+    /* Side by side */
+    gap: 20px;
+    margin-top: 40px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feature-card {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: #58a6ff;
+}
+
+.feature-card h3 {
+    margin-top: 0;
+    color: #c9d1d9;
+}
 
 .input-section {
     margin:20px;
@@ -195,34 +259,33 @@ font-weight: bold;
 
 
 .footer {
-    background-image: linear-gradient(50deg, blue, black);
-    display: flex;
+    background-color: #0d1117;
+   
     color: #fff;
     text-align: center;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
     padding: 20px;
   
     
     font-size: 0.7rem;
-    width: 100%;
-    height: 100%;
+    
 }
 
 .projects-section {
-    margin: 20px;
+    margin: 20px auto;
     padding: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    /*background-color: #fff;*/
-     /*background-image: linear-gradient(40deg, blue, black);*/
-     color: #fff;
-    /*border-radius: 20px;*/
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+    color: #fff;
+    border-radius: 20px;
     text-align: center;
-    /*box-shadow: 0 4px 8px black;*/
+    
 }
 
 .projects-section  h3 {
@@ -230,7 +293,7 @@ font-weight: bold;
     text-align: center;
     font-weight: bold;
     font-size: 1rem;
-    color: blue;
+    color: #fff;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -261,7 +324,7 @@ font-weight: bold;
     height: 250px;
     border: 2px solid blue;
     box-shadow: 0 2px 4px black;
-    
+    background-color: #fff;
 
 
 }

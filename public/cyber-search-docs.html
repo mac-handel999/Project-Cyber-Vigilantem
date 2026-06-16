@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Research Assistant - Documentation</title>
+   
+
+    <link rel="stylesheet" href="cyber-search.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="Images\Project Cyber Vigilan-Teem logo.jpg ">
+    
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <div class="logo">
+            <img class="logo-img" src="/public\Images\Project_Cyber-logo.png " alt=" Logo of P Cyber Vtem" width="150px"
+                height="150px">
+
+        </div>
+
+
+
+
+    </div>
+    </div>
+
+    <div class="dropdown">
+        <div class="nav-btn-1">
+            <a href="index.html">Home</a>
+        </div>
+
+        <div class="navbar-btn-1">
+            <a href="#cyber-search">Cyber Sec Research</a>
+
+        </div>
+
+        <div class="navbar-btn-1">
+            <a href="#url-checker">URL Checker</a>
+        
+        </div>
+
+    </div> <br>
+
+
+    <div class="container" id="cyber-search">
+        <h1>How to Use the Cybersecurity Research Assistant</h1>
+        <p>To get the most out of your AI-powered Cybersecurity Research Assistant, focus your queries on specific
+            technical identifiers and clear security goals. Your assistant is designed to sift through global threat
+            intelligence to provide you with concise, actionable reports.</p>
+
+        <h2>1. Vulnerability & CVE Analysis</h2>
+        <p>Use these when you see a security alert and need an immediate breakdown of the danger.</p>
+        <ul>
+            <li><code>CVE-2026-12345</code> (Use specific CVE IDs for the most accurate results).</li>
+            <li><code>Apache Struts remote code execution vulnerability</code></li>
+            <li><code>Is there a PoC for the recent Windows print spooler bug?</code></li>
+            <li><code>Critical vulnerabilities in OpenSSL June 2026</code></li>
+        </ul>
+
+        <h2>2. Threat Actor & TTP Profiling</h2>
+        <p>Use these to understand the behavior of known hacking groups.</p>
+        <ul>
+            <li><code>APT29 TTPs</code> (TTP = Tactics, Techniques, and Procedures).</li>
+            <li><code>Lazarus Group recent campaigns 2026</code></li>
+            <li><code>Latest IOCs for Emotet malware</code></li>
+            <li><code>How does the new Ransomware-as-a-Service model 'DarkVault' operate?</code></li>
+        </ul>
+
+        <h2>3. Defensive Configuration & Hardening</h2>
+        <p>Use these for actionable advice on securing your own infrastructure.</p>
+        <ul>
+            <li><code>How to harden Nginx against DDOS</code></li>
+            <li><code>Best practice configuration for IPFire firewall</code></li>
+            <li><code>Secure coding practices for Node.js authentication</code></li>
+            <li><code>How to detect lateral movement in a Linux network</code></li>
+        </ul>
+
+        <h2>4. Zero-Day & Trending Alerts</h2>
+        <p>Use these to get a pulse on the industry.</p>
+        <ul>
+            <li><code>CISA KEV catalog update</code> (KEV = Known Exploited Vulnerabilities).</li>
+            <li><code>Top cybersecurity threats this week</code></li>
+            <li><code>New zero-day exploit browser security</code></li>
+        </ul>
+
+        <div class="tip">
+            <h3>Pro-Tips for Better Results</h3>
+            <p><strong>Use Boolean-style keywords:</strong> Combining a <em>Tech + Threat + Goal</em> structure yields
+                the best snippets. Example: <code>WordPress SQL injection mitigation</code>.</p>
+            <p><strong>Control the AI's Persona:</strong> You can type instructions directly into the input bar.</p>
+            <ul>
+                <li><code>Summarize the threat for a C-suite executive: [CVE-2026-9999]</code></li>
+                <li><code>List all technical indicators of compromise for: [Malware Name]</code></li>
+                <li><code>Explain how to patch: [Vulnerability Name] in simple steps</code></li>
+            </ul>
+        </div>
+    </div> <br>
+
+
+        <div class="container" id="url-checker" >
+            <h1>How to Use the Safe Browse URL Checker</h1>
+            <p>The Safe Browse URL Checker is designed to provide immediate security status feedback on any web address. By
+                leveraging real-time threat intelligence, it helps you identify potential phishing attempts, malware
+                distribution sites, and malicious infrastructure.</p>
+        
+            <h2>1. How to Perform a Check</h2>
+            <ul>
+                <li><strong>Input the URL:</strong> Paste the full URL (including <code>https://</code> or <code>http://</code>)
+                    into the input field.</li>
+                <li><strong>Initiate Scan:</strong> Click the "Check URL" button.</li>
+                <li><strong>Review Status:</strong> The application will cross-reference the URL against Google’s global Safe
+                    Browsing database and return a status: <em>Clean</em> or <em>Suspicious/Malicious</em>.</li>
+            </ul>
+        
+            <h2>2. Understanding the Results</h2>
+            <ul>
+                <li><strong>Clean:</strong> No threats identified. <em>Note: A "Clean" result does not guarantee the site is
+                        100% safe. Always exercise caution.</em></li>
+                <li><strong>Malicious/Phishing:</strong> The URL has been flagged for hosting dangerous content. <strong>Do not
+                        navigate to this site.</strong></li>
+            </ul>
+        
+            <h2>3. Testing Your Tool</h2>
+            <div class="test-box">
+                <p><strong>Dev Note:</strong> To ensure your URL checker is functioning correctly, you can use the specific test
+                    URL provided by Google for security researchers. This will trigger a "Malicious" result.</p>
+                <p><strong>Bad URL Test:</strong> <code>http://malware.testing.google.test/testing/malware/</code></p>
+            </div>
+        
+            <div class="warning">
+                <h3>Important Security Warning</h3>
+                <p>The test URL above is a <strong>controlled, safe-to-test</strong> environment. <strong>Never</strong> input
+                    real, suspicious URLs that you encounter in the wild into your checker if you are unsure of their intent, as
+                    navigating to them can be dangerous.</p>
+            </div>
+        </div>
+
+
+
+  <br>
+    <div class="footer">
+    
+        <br>
+        <h3>PRODUCT OF : {FABIAN CODES HQ} || fabikechukwuemeana@gmail.com</h3> <br>
+    
+        <br>
+        <small>&copy; 2026 Project Cyber Vigilan-Teem | All rights reserved.</small>
+    </div>
+
+</body>
+
+</html>

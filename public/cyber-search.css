@@ -1,0 +1,153 @@
+/* Dark theme for a "security terminal" look */
+body {
+    background-color: #0d1117;
+    /* Deep Base */
+    color: #c9d1d9;
+    /* Readable Text */
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.container {
+    background-color: #161b22;
+    /* Graphite Grey */
+    border: 1px solid #30363d;
+}
+
+button {
+    background-color: #238636;
+    /* Success Green */
+    color: #ffffff;
+}
+
+/* Add this for a "Cyber-glow" effect on inputs */
+input:focus {
+    outline: none;
+    border: 1px solid #58a6ff;
+    /* Cyber Electric */
+    box-shadow: 0 0 5px #58a6ff;
+}
+
+
+
+
+
+
+body {
+    /* background-color: #0d1117; */
+    color: #c9d1d9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    align-items: center;
+    
+}
+
+h2 {
+    color: #fff;
+    text-align: center;
+    font-size: 2rem;
+}
+
+input {
+    margin:20px;
+    padding: 10px;
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    color: white;
+    padding: 10px;
+    width: 250px;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #238636;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2ea043;
+}
+
+#output {
+    align-items: center;
+    justify-content: center;
+    display: block;
+    flex-wrap: wrap;
+    text-align: center;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #161b22;
+    border-left: 4px solid #58a6ff;
+    width: 80%;
+    white-space: pre-wrap;
+    /* Keeps the AI's formatting */
+    line-height: 1.6;
+}
+
+/*cyber sec research engine documentation page*/
+
+
+ @page {
+     size: A4;
+     margin: 20mm;
+     background-color: #f4f7f6;
+ }
+
+ body {
+     font-family: 'Segoe UI', Tahoma, sans-serif;
+     line-height: 1.6;
+     color: #fff;
+     background-color: #f4f7f6;
+
+ }
+
+ .container {
+     max-width: 800px;
+     margin: 20px auto;
+     background: white;
+     padding: 40px;
+     border-radius: 8px;
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+ }
+
+ h1 {
+     color: #fff;
+     border-bottom: 2px solid #58a6ff;
+     padding-bottom: 10px;
+ }
+
+ h2 {
+     color: #58a6ff;
+     margin-top: 30px;
+ }
+
+ h3 {
+     color: #34495e;
+     margin-top: 20px;
+ }
+
+ ul {
+     margin-left: 20px;
+ }
+
+ li {
+     margin-bottom: 10px;
+ }
+
+ code {
+     background: #eef2f3;
+     padding: 2px 5px;
+     border-radius: 4px;
+     font-family: monospace;
+     color: #d63384;
+ }
+
+ .tip {
+     background: #e7f3ff;
+     border-left: 4px solid #58a6ff;
+     padding: 15px;
+     margin: 20px 0;
+ }
