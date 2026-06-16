@@ -55,6 +55,10 @@ function renderRoadmap(weeks) {
     `).join('');
 }
 
+
+
+
+
 // Save progress to LocalStorage
 function saveProgress() {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -69,3 +73,20 @@ window.onload = () => {
         renderRoadmap(JSON.parse(savedRoadmap));
     }
 };
+
+
+function clearAll() {
+    if (confirm("Are you sure you want to clear your entire roadmap? This cannot be undone.")) {
+        // 1. Clear Local Storage
+        localStorage.removeItem('current-roadmap');
+        localStorage.removeItem('roadmap-progress');
+        
+        // 2. Clear the DOM
+        document.getElementById('roadmap-output').innerHTML = "";
+        
+        // 3. Optional: Clear the input field
+        document.getElementById('goal').value = "";
+        
+        console.log("Data cleared successfully.");
+    }
+}

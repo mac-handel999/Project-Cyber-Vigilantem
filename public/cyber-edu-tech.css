@@ -92,3 +92,18 @@ a {
     border: 1px solid #30363d;
     border-radius: 4px;
 }
+
+.delete-btn {
+    padding: 12px 20px;
+    background-color: #da3633;
+    /* A sharp red for delete */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.delete-btn:hover {
+    background-color: #f85149;
+}
