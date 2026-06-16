@@ -73,7 +73,7 @@ app.post('/api/research', async (req, res) => {
         // 3. Use Groq to synthesize the report
         const chatCompletion = await groq.chat.completions.create({
             messages: [
-                { role: "system", content: "You are a cybersecurity expert. Identify potential IOCs (Indicators of Compromise) and recommended remediation steps from the provided context." },
+                { role: "system", content: "You are a cybersecurity expert. Identify potential IOCs (Indicators of Compromise), TTPs (Tatics,Techiques, and Procedures) and recommended remediation steps from the provided context." },
                 { role: "user", content: `Analyze this threat intelligence: ${context}` }
             ],
             model: "llama-3.3-70b-versatile", // This is one of Groq's best models
@@ -92,5 +92,80 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`[Project Cyber Vigilan-teem Engine] Environment active across local routing matrix on port ${PORT}`);
 });
+
+
+
+// --- Rate Limiting Logic ---
+const cache = new Map();
+let dailyCount = 0;
+let lastResetDate = new Date().getDate();
+
+app.use((req, res, next) => {
+    const today = new Date().getDate();
+    if (today !== lastResetDate) {
+        dailyCount = 0;
+        lastResetDate = today;
+    }
+
+    // Set limit to 8 to stay safe within your 250/mo limit
+    if (req.path === '/api/generate-roadmap' && dailyCount >= 8) {
+        return res.status(429).json({ error: "Daily limit reached. Please try again tomorrow." });
+    }
+    
+    if (req.path === '/api/generate-roadmap') dailyCount++;
+    next();
+});
+
+// --- Roadmap Route ---
+app.post('/api/generate-roadmap', async (req, res) => {
+    const { goal } = req.body;
+    if (!goal) return res.status(400).json({ error: "Goal is required" });
+    
+    const cacheKey = goal.toLowerCase().trim();
+
+    // 1. Check cache
+    if (cache.has(cacheKey)) {
+        console.log("Serving from cache.");
+        return res.json(cache.get(cacheKey));
+    }
+
+    try {
+        // 2. Perform API calls
+        const [ytRes, webRes] = await Promise.all([
+            axios.get(`https://serpapi.com/search`, { params: { engine: "youtube", search_query: `${goal} cybersecurity roadmap`, api_key: process.env.SERP_API_KEY } }),
+            axios.get(`https://serpapi.com/search`, { params: { engine: "google", q: `cybersecurity roadmap ${goal} course`, api_key: process.env.SERP_API_KEY } })
+        ]);
+
+        const resourcesContext = {
+            videos: ytRes.data.video_results ? ytRes.data.video_results.slice(0, 5) : [],
+            web: webRes.data.organic_results ? webRes.data.organic_results.slice(0, 5) : []
+        };
+
+        // 3. AI Generation
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                { role: "system", content: "You are a Senior Cybersecurity Mentor. Output ONLY a valid JSON object. Format: { weeks: [{ week: number, topic: string, videos: [{title: string, link: string}], web: [{title: string, link: string}] }] }. Provide 3+ high-quality links per category." },
+                { role: "user", content: `Create an 26-week roadmap for ${goal} using these resources: ${JSON.stringify(resourcesContext)}` }
+            ],
+            model: "llama-3.3-70b-versatile",
+            response_format: { type: "json_object" }
+        });
+
+        const roadmapData = JSON.parse(chatCompletion.choices[0].message.content);
+
+        // 4. Save to cache and return
+        cache.set(cacheKey, roadmapData);
+        res.json(roadmapData);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to generate roadmap." });
+    }
+});
+
+app.listen(5500, () => console.log('Server running on port 5500'));
+
+
+
 
 module.exports = app;
