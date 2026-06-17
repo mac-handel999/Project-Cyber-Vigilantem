@@ -1,6 +1,20 @@
 
-// let dailyCount = 0;
-// let lastResetDate = new Date().getDate();
+
+let BACKEND_URL = '/api/generate-roadmap'; 
+
+const currentHost = window.location.hostname;
+const currentPort = window.location.port;
+
+if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
+    // If your Live Server is running on port 5500, point it directly to the Express server on 5000
+    if (currentPort === '5500') {
+        BACKEND_URL = 'http://localhost:5000/api/generate-roadmap';
+    } else if (currentPort === '6700') {
+        BACKEND_URL = 'http://localhost:6700/api/generate-roadmap';
+    } else {
+        BACKEND_URL = 'http://localhost:5000/api/generate-roadmap';
+    }
+}
 
 
 
@@ -14,7 +28,7 @@ async function generate() {
     output.innerHTML = "<em>Architecting your curriculum...</em>";
 
     try {
-        const res = await fetch('/api/generate-roadmap', {
+        const res = await fetch(BACKEND_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ goal })
