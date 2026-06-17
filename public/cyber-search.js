@@ -3,7 +3,7 @@ async function runResearch() {
             const output = document.getElementById('output');
             output.innerText = "Scanning threat intelligence...";
 
-            const response = await fetch('http://localhost:5500/api/research', {
+            const response = await fetch('/api/research', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query })

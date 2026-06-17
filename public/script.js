@@ -14,7 +14,7 @@ async function generate() {
     output.innerHTML = "<em>Architecting your curriculum...</em>";
 
     try {
-        const res = await fetch('http://localhost:5500/api/generate-roadmap', {
+        const res = await fetch('/api/generate-roadmap', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ goal })
