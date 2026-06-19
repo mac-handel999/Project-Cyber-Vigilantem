@@ -168,4 +168,74 @@ app.listen(5500, () => console.log('Server running on port 5500'));
 
 
 
+
+//for the geo ip scanner and email breach scanner features server logic
+
+// =================================================================
+// 🛡️ SUB-ROUTINE 1: GEOLOCATION ROUTER ENGINE (HackerTarget API)
+// =================================================================
+app.post('/api/geoip', async (req, res) => {
+    const { target } = req.body;
+    if (!target) return res.status(400).json({ success: false, error: "Missing parameter target string." });
+
+    try {
+        const response = await axios.get(`https://api.hackertarget.com/geoip/?q=${encodeURIComponent(target)}`);
+        const rawReport = response.data;
+
+        if (rawReport.includes("error") || rawReport.includes("No records found")) {
+            return res.status(400).json({ success: false, error: "Target data parsing unresolved." });
+        }
+
+        let latitude = "0";
+        let longitude = "0";
+        const lines = rawReport.split('\n');
+        
+        lines.forEach(line => {
+            if (line.toLowerCase().includes("latitude:")) latitude = line.split(':')[1].trim();
+            if (line.toLowerCase().includes("longitude:")) longitude = line.split(':')[1].trim();
+        });
+
+        res.json({ success: true, latitude, longitude, raw_log: rawReport });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Network infrastructure timeout." });
+    }
+});
+
+// =================================================================
+// 🛡️ SUB-ROUTINE 2: CREDENTIAL BREACH ENGINE (LeakCheck API)
+// =================================================================
+app.post('/api/breach-check', async (req, res) => {
+    const { identity } = req.body;
+    const LEAKCHECK_KEY = process.env.LEAKCHECK_API_KEY;
+
+    if (!identity) return res.status(400).json({ error: "Missing target verification parameter." });
+
+    try {
+        // Querying LeakCheck engine using your custom developer API token string
+        const url = `https://leakcheck.io/api/v2/query/${encodeURIComponent(identity)}?key=${LEAKCHECK_KEY}`;
+        const response = await axios.get(url);
+
+        if (response.data.success && response.data.sources && response.data.sources.length > 0) {
+            const compiledSources = response.data.sources.map(source => source.name);
+            res.json({ breached: true, sources: compiledSources });
+        } else {
+            res.json({ breached: false, sources: [] });
+        }
+    } catch (error) {
+        console.error("LeakCheck API Connection Failure:", error.message);
+        res.status(500).json({ error: "External registry response fault." });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`[+] Defensive Application Server Engine Active on: http://localhost:${PORT}`);
+});
+
+
+
+
+
+
+
+
 module.exports = app;

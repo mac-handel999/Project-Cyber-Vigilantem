@@ -151,3 +151,259 @@ button:hover {
      padding: 15px;
      margin: 20px 0;
  }
+
+
+ /* styles for email scanner and geo ip scanner docs */
+
+
+ :root {
+     --bg-main: #030712;
+     --bg-side: #0b0f19;
+     --bg-card: #0f172a;
+     --neon-cyan: #06b6d4;
+     --neon-blue: #3b82f6;
+     --neon-green: #00ffcc;
+     --border-line: #1e293b;
+     --text-main: #cbd5e1;
+     --text-bright: #ffffff;
+     --text-muted: #64748b;
+ }
+
+ * {
+     box-sizing: border-box;
+     margin: 0;
+     padding: 0;
+     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+     scroll-behavior: smooth;
+ }
+
+ body {
+     background-color: var(--bg-main);
+     color: var(--text-main);
+     line-height: 1.6;
+ }
+
+ /* Base App Layout */
+ .docs-wrapper {
+     display: flex;
+     min-height: 100vh;
+ }
+
+ /* Navigation Sidebar System */
+ .sidebar {
+     width: 260px;
+     background-color: var(--bg-side);
+     border-right: 1px solid var(--border-line);
+     padding: 30px 20px;
+     position: fixed;
+     height: 100vh;
+ }
+
+ .sidebar-brand {
+     font-size: 1.1rem;
+     font-weight: 800;
+     color: var(--text-bright);
+     letter-spacing: 1.5px;
+     margin-bottom: 35px;
+     padding-left: 10px;
+     border-left: 3px solid var(--neon-cyan);
+ }
+
+ .sidebar-nav {
+     display: flex;
+     flex-direction: column;
+     gap: 8px;
+ }
+
+ .nav-item {
+     color: var(--text-muted);
+     text-decoration: none;
+     padding: 10px 12px;
+     border-radius: 6px;
+     font-size: 0.95rem;
+     font-weight: 500;
+     transition: all 0.2s;
+ }
+
+ .nav-item:hover,
+ .nav-item.active {
+     color: var(--text-bright);
+     background-color: rgba(6, 182, 212, 0.08);
+     padding-left: 16px;
+ }
+
+ /* Main Documentation Column */
+ .docs-content {
+     margin-left: 260px;
+     flex: 1;
+     max-width: 850px;
+     padding: 60px 50px;
+    background-color: var(--bg-card);
+    border-radius: 20px;
+ }
+
+ .content-header {
+     border-bottom: 1px solid var(--border-line);
+     padding-bottom: 25px;
+     margin-bottom: 40px;
+ }
+
+ .content-header h1 {
+     color: var(--text-bright);
+     font-size: 2rem;
+     font-weight: 700;
+     margin-bottom: 8px;
+ }
+
+ .content-header p {
+     color: var(--neon-blue);
+     font-size: 1rem;
+ }
+
+ /* Section Structural Block Elements */
+ .docs-section {
+     margin-bottom: 45px;
+    background-color: var(--bg-card);
+    padding: 10px;
+    border-radius: 10px;
+ }
+
+ .docs-section h2 {
+     color: var(--text-bright);
+     font-size: 1.35rem;
+     margin-bottom: 15px;
+     font-weight: 600;
+ }
+
+ .docs-section p {
+     margin-bottom: 15px;
+     font-size: 1rem;
+    background-color: var(--bg-card);
+ }
+
+ /* Curated Bullet & Numeric Formatting */
+ .steps-list {
+     padding-left: 20px;
+     margin-bottom: 20px;
+    background-color: #1e293b;
+ }
+
+ .steps-list li {
+     margin-bottom: 12px;
+     padding-left: 5px;
+     background-color: #1e293b;
+ }
+
+ .steps-list code,
+ table code {
+     background-color: #1e293b;
+     color: var(--neon-cyan);
+     padding: 2px 6px;
+     border-radius: 4px;
+     font-family: monospace;
+     font-size: 0.9rem;
+ }
+
+ ul {
+     padding-left: 20px;
+     margin-bottom: 20px;
+ }
+
+ ul li {
+     margin-bottom: 10px;
+ }
+
+ /* Custom Component Layout Cards */
+ .callout {
+     padding: 16px 20px;
+     border-radius: 8px;
+     margin: 20px 0;
+     font-size: 0.95rem;
+     background-color: var(--bg-card);
+ }
+
+ .callout.warning {
+     border-left: 4px solid var(--neon-cyan);
+     color: var(--text-main);
+ }
+
+ .callout.note {
+     border-left: 4px solid var(--neon-blue);
+     color: var(--text-main);
+ }
+
+ .status-grid {
+     display: grid;
+     grid-template-columns: 1xl 1fr;
+     gap: 20px;
+     margin-top: 20px;
+ }
+
+ .status-card {
+     background-color: var(--bg-card);
+     border: 1px solid var(--border-line);
+     padding: 20px;
+     border-radius: 8px;
+ }
+
+ .status-card h4 {
+     margin-bottom: 8px;
+     font-size: 1rem;
+ }
+
+ .status-card.safe h4 {
+     color: var(--neon-green);
+ }
+
+ .status-card.danger h4 {
+     color: #ff3366;
+ }
+
+ /* Grid Table Architectures */
+ table {
+     width: 100%;
+     border-collapse: collapse;
+     margin: 20px 0;
+     background-color: var(--bg-card);
+     border-radius: 8px;
+     overflow: hidden;
+ }
+
+ th,
+ td {
+     padding: 12px 15px;
+     text-align: left;
+     font-size: 0.95rem;
+ }
+
+ th {
+     background-color: #1e293b;
+     color: var(--text-bright);
+     font-weight: 600;
+ }
+
+ tr {
+     border-bottom: 1px solid var(--border-line);
+ }
+
+ /* Responsive Adaptive Viewports */
+ @media (max-width: 768px) {
+     .sidebar {
+         width: 100%;
+         height: auto;
+         position: relative;
+     }
+
+     .docs-wrapper {
+         flex-direction: column;
+     }
+
+     .docs-content {
+         margin-left: 0;
+         padding: 30px 20px;
+     }
+
+     .status-grid {
+         grid-template-columns: 1fr;
+     }
+ }
