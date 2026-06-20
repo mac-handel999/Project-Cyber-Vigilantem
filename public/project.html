@@ -8,9 +8,14 @@
     
     <title>Project Cyber Vteem/url-checker</title>  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="Images\Project Cyber Vigilan-Teem logo.jpg ">
-  
-
+    <link rel="icon" type="image/x-icon" href="Images/Project Cyber Vigilan-Teem logo.jpg">
+    <link rel="apple-touch-icon" href="Images/Project Cyber Vigilan-Teem logo.jpg">
+    <link rel="manifest" href="/manifest.json">
+    <!-- Theme color for supported browsers. Provide light/dark variants and a MS tile color for broader compatibility -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#06b6d4">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#052a33">
+    <meta name="msapplication-TileColor" content="#06b6d4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
@@ -66,7 +71,24 @@
         </div>
     </div>
 
-   
+
+
+    <div class="powered-by">
+        <div class="feature-card">
+            <h2>
+                <strong>
+                    <b>NOTE:</b> 
+                    The Safe Browse URL Checker is now INSTALLABLE as a PWA WEB APP or Mobile APP in CHROME BROWSER
+                    <br> 
+                    and it's now a CHROME BROWSER EXTENTION
+                </strong>
+            </h2>
+
+        </div>
+    </div><br>
+
+
+        <br>
         <div class="footer">
 
             <div class="description-section">
@@ -87,6 +109,21 @@
 
         <script>
         AOS.init();
+        </script>
+
+        <script>
+            // Register the service worker background layer seamlessly on application load
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/service-worker.js')
+                        .then((registration) => {
+                            console.log('[-] PWA Architecture Online. Scope:', registration.scope);
+                        })
+                        .catch((err) => {
+                            console.error('[!] PWA registration layer fault:', err);
+                        });
+                });
+            }
         </script>
 </body>
 </html>

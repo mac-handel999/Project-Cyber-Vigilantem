@@ -1,0 +1,24 @@
+
+{
+  "short_name": "Cyber Vigilan-Team",
+  "name": "PROJECT CYBER VIGILAN-TEAM : CYBER SEC SUITES",
+  "description": "Cyber Security Advanced Automated Identity Breach Tracker and GeoIP Telemetry Suite",
+  "icons": [
+    {
+      "src": " public/Images/Project Cyber Vigilan-Teem logo.jpg",
+      "type": "image/jpg",
+      "sizes": "96x96"
+    },
+    {
+      "src": " public/Images/Project_Cyber-logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#030712",
+  "theme_color": "#06b6d4",
+  "display": "standalone",
+  "orientation": "portrait-primary"
+}

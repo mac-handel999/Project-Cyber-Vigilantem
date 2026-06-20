@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="styles.css">
     <title>Cybersecurity Roadmap Generator</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="icon" type="image/x-icon" href="Images\Project Cyber Vigilan-Teem logo.jpg ">
+<link rel="icon" type="image/x-icon" href="Images/Project Cyber Vigilan-Teem logo.jpg">
+<link rel="apple-touch-icon" href="Images/Project Cyber Vigilan-Teem logo.jpg">
 
-
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 
@@ -75,6 +77,22 @@
         <br>
         <small>&copy; 2026 Project Cyber Vigilan-Teem | All rights reserved.</small>
     </div>
+
+  <script>
+    // Register the service worker background layer seamlessly on application load
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('[-] PWA Architecture Online. Scope:', registration.scope);
+                })
+                .catch((err) => {
+                    console.error('[!] PWA registration layer fault:', err);
+                });
+        });
+    }
+</script>
+
     <script src="script.js"></script>
 </body>
 

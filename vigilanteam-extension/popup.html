@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            width: 380px;
+            background-color: #030712;
+            color: #cbd5e1;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            padding: 18px;
+            margin: 0;
+        }
+
+        h3 {
+            color: #06b6d4;
+            font-size: 1rem;
+            margin-top: 0;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 10px;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .meta-row {
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            color: #94a3b8;
+        }
+
+        .meta-row span {
+            color: #fff;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background-color: rgba(6, 182, 212, 0.08);
+            border: 1px solid #06b6d4;
+            color: #06b6d4;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-badge.danger {
+            border-color: #ff3366;
+            color: #ff3366;
+            background-color: rgba(255, 51, 102, 0.08);
+        }
+
+        .log-section-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0 10px 0;
+        }
+
+        .history-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .history-card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .history-card.threat {
+            border-left: 3px solid #ff3366;
+        }
+
+        .history-card.clear {
+            border-left: 3px solid #00ffcc;
+        }
+
+        .history-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .history-url {
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            font-family: monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <title>Link Shield Monitor</title>
+</head>
+
+<body>
+
+    <h3>🛡️ LINK SHIELD STATUS <span style="font-size:0.7rem; color:#64748b;">v1.2</span></h3>
+
+    <div class="meta-row">Active Focus: <span id="uiUrl">Awaiting track...</span></div>
+    <div class="meta-row">Threat State: <span id="uiStatus" class="status-badge">Idle</span></div>
+
+    <div class="log-section-title">⏱️ Rolling Inspection Logs (Last 5)</div>
+    <div id="historyBox" class="history-container">
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

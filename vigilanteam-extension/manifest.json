@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Cyber VigilanTeam Link Shield",
+  "version": "1.2",
+  "description": "Automated background threat intelligence scanner with real-time injection warnings.",
+  "permissions": [
+    "webNavigation",
+    "tabs",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "96": "icon.png"
+    }
+  }
+}

@@ -6,12 +6,17 @@
     <title>Cyber Threat Research Engine</title>
     <link rel="stylesheet" href="cyber-search.css">
     <link rel="stylesheet" href="styles.css">
-
+ 
+    <link rel="manifest" href="/manifest.json">
+    <!-- Provide theme colors for browsers that support them; include light/dark variants and a fallback for Windows tiles -->
+    <meta name="theme-color" content="#06b6d4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#021827" media="(prefers-color-scheme: dark)">
+    <meta name="msapplication-TileColor" content="#06b6d4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="Images\Project Cyber Vigilan-Teem logo.jpg ">
-    
-    
+    <link rel="icon" type="image/x-icon" href="Images/Project Cyber Vigilan-Teem logo.jpg">
+    <link rel="apple-touch-icon" href="Images/Project Cyber Vigilan-Teem logo.jpg">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
@@ -80,6 +85,22 @@
     <script>
         AOS.init();
     </script>
+
+
+<script>
+    // Register the service worker background layer seamlessly on application load
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('[-] PWA Architecture Online. Scope:', registration.scope);
+                })
+                .catch((err) => {
+                    console.error('[!] PWA registration layer fault:', err);
+                });
+        });
+    }
+</script>
 </body>
 
 </html>

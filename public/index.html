@@ -5,11 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="P Cyber Vtem, home, website, cyber security, technology">
+    <meta name="author" content="fabian codes hq, emeana ikechukwu fabian, fabian,emeana,ikechukwu,fabian codes">
     <link rel="stylesheet" href="styles.css">
 
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#06b6d4">
+    <meta name="msapplication-navbutton-color" content="#06b6d4">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="Images\Project Cyber Vigilan-Teem logo.jpg ">
+    <link rel="icon" type="image/x-icon" href="/Images/Project Cyber Vigilan-Teem logo.jpg">
+    <link rel="apple-touch-icon" href="/Images/Project Cyber Vigilan-Teem logo.jpg">
     <title>Project Cyber Vigilan-Teem/#home</title>
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -54,7 +61,9 @@
             <div class="feature-card">
                 <h3>🛡️ Safe Browse URL Checker</h3>
                 <p>Analyzes URLs or Domain Names against Google's live Safe Browse databases to identify potential phishing, malware, and malicious
-                    infrastructure or Web sites.</p>
+                    infrastructure or Web sites. <br>
+                <strong><b>NOTE:</b> The Safe Browse URL Checker is now INSTALLABLE as PWA  WEB APP in CHROME BROWSER <br>  and it's now A CHROME BROWSER EXTENTION</strong>
+                </p>
             </div>
 
 
@@ -85,12 +94,19 @@
                 Like: ISP Geo Location, IP (if it's a Domain name scan), Country, State, City, Longitude, Latitude, 
                 <br> and a Mini Map View of the Target's ISP Location .</p>
             </div>
-            </div>
+            </div><br>
+
+
+<h2><strong><b>NOTE:</b> The Safe Browse URL Checker is now INSTALLABLE as a PWA WEB APP or Mobile APP in CHROME BROWSER <br> and it's
+        now A
+        CHROME BROWSER EXTENTION</strong></h2>
 
             <br>
-            <h2>PRODUCT OF : <br>
+            <h3>PRODUCT OF : <br>
                  {FABIAN CODES HQ} 
-            </h3> <br>
+            </h2> <br>
+
+           
         </div>
 
         
@@ -238,6 +254,22 @@
             <script>
                 AOS.init();
             </script>
+
+
+<script>
+    // Register the service worker background layer seamlessly on application load
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('[-] PWA Architecture Online. Scope:', registration.scope);
+                })
+                .catch((err) => {
+                    console.error('[!] PWA registration layer fault:', err);
+                });
+        });
+    }
+</script>
 </body>
 
 </html>

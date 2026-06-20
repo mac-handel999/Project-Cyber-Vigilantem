@@ -9,24 +9,24 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 // Middleware Ordering
 app.use(express.json());
-
+// --- FIX 1: CORS POLICY EXPANSION ---
+// Allows standard local development port loops while safely accepting extension traffic signatures
 app.use(cors({
-    origin: [
-        'http://localhost:5000',
-        'http://localhost:6700',
-        'http://127.0.0.1:5000',
-        'http://127.0.0.1:6700',
-        'http://localhost:5500',
-        'http://127.0.0.1:5500'
-    ]
+    origin: '*', 
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Main Safe Browsing API Route
 app.post('/api/check-url', async (req, res) => {
-    const { urlToCheck } = req.body;
+    // --- FIX 2: PAYLOAD EXTRACTION ALIGNMENT ---
+    // Destructures both options so it handles standard web forms or extension JSON objects flawlessly
+    const { urlToCheck, target } = req.body;
+    const finalUrl = urlToCheck || target; 
+
     const API_KEY = process.env.GOOGLE_SAFE_BROWSING_KEY;
 
-    if (!urlToCheck) {
+    if (!finalUrl) {
         return res.status(400).json({ error: 'URL is required' });
     }
 
@@ -37,19 +37,37 @@ app.post('/api/check-url', async (req, res) => {
             threatTypes: ['MALWARE', 'SOCIAL_ENGINEERING', 'UNWANTED_SOFTWARE', 'POTENTIALLY_HARMFUL_APPLICATION'],
             platformTypes: ['ANY_PLATFORM'],
             threatEntryTypes: ['URL'],
-            threatEntries: [{ url: urlToCheck }]
+            threatEntries: [{ url: finalUrl }]
         }
     };
 
     try {
         const response = await axios.post(targetUrl, requestBody);
-        res.json(response.data);
+        
+        // Google Safe Browsing returns an empty object {} if the site is perfectly safe.
+        // Let's format the payload response data to make it easier for our popup script to read.
+        if (response.data && response.data.matches) {
+            res.json({
+                success: true,
+                isMalicious: true,
+                statusText: 'Malicious Signature Detected',
+                matches: response.data.matches
+            });
+        } else {
+            res.json({
+                success: true,
+                isMalicious: false,
+                statusText: 'Secure Link'
+            });
+        }
     } catch (error) {
         console.error('Google API Hook Error:', error.message);
         res.status(500).json({ error: 'Failed to connect to Google validation registry' });
     }
 });
 
+const PORT = 5500; // Running precisely on your assigned network entry port vector
+app.listen(PORT, () => console.log(`[+] URL Checker Proxy active on port ${PORT}`));
 
 
 // 2. Initialize the client
@@ -88,7 +106,7 @@ app.post('/api/research', async (req, res) => {
 
 app.listen(5500, () => console.log('Server running on http://localhost:5500'));
 
-const PORT = process.env.PORT || 5000;
+// const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
     console.log(`[Project Cyber Vigilan-teem Engine] Environment active across local routing matrix on port ${PORT}`);
 });

@@ -8,11 +8,11 @@ const currentPort = window.location.port;
 if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
     // If your Live Server is running on port 5500, point it directly to the Express server on 5000
     if (currentPort === '5500') {
-        BACKEND_URL = 'http://localhost:5000/api/generate-roadmap';
+        BACKEND_URL = 'http://localhost:5500/api/generate-roadmap';
     } else if (currentPort === '6700') {
         BACKEND_URL = 'http://localhost:6700/api/generate-roadmap';
     } else {
-        BACKEND_URL = 'http://localhost:5000/api/generate-roadmap';
+        BACKEND_URL = 'http://localhost:5500/api/generate-roadmap';
     }
 }
 
@@ -53,14 +53,14 @@ function renderRoadmap(weeks) {
             <div class="resource-section">
                 <h4>📺 Video Tutorials</h4>
                 <div class="resource-list">
-                    <ul>${w.videos.map(v => `<li><a href="${v.link}" target="_blank">${v.title}</a></li>`).join('')}</ul>
+                    <ul>${w.videos?.map(v => `<li><a href="${v.link}" target="_blank">${v.title}</a></li>`).join('')}</ul>
                 </div>
             </div>
 
             <div class="resource-section">
                 <h4>🌐 Web Courses & Docs</h4>
                 <div class="resource-list">
-                    <ul>${w.web.map(web => `<li><a href="${web.link}" target="_blank">${web.title}</a></li>`).join('')}</ul>
+                    <ul>${w.web?.map(web => `<li><a href="${web.link}" target="_blank">${web.title}</a></li>`).join('')}</ul>
                 </div>
             </div>
             

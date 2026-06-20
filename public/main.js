@@ -12,11 +12,11 @@ const currentPort = window.location.port;
 if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
     // If your Live Server is running on port 5500, point it directly to the Express server on 5000
     if (currentPort === '5500') {
-        BACKEND_URL = 'http://localhost:5000/api/check-url';
+        BACKEND_URL = 'http://localhost:5500/api/check-url';
     } else if (currentPort === '6700') {
         BACKEND_URL = 'http://localhost:6700/api/check-url';
     } else {
-        BACKEND_URL = 'http://localhost:5000/api/check-url';
+        BACKEND_URL = 'http://localhost:5500/api/check-url';
     }
 }
 

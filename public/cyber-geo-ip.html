@@ -7,6 +7,10 @@
     <title>GeoIP Recon Matrix</title>
     <link rel="stylesheet" href="cyber-geo-ip.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="Images/Project_Cyber-logo.png">
+    <!-- theme-color meta removed for broader browser compatibility (not supported by some browsers) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 
 <body>
@@ -14,33 +18,21 @@
     <header>
         <div class="header">
             <div class="logo">
-                <img class="logo-img" src="/public\Images\Project_Cyber-logo.png " alt=" Logo of P Cyber Vtem" width="150px"
-                    height="150px">
-    
+                <img class="logo-img" src="Images/Project_Cyber-logo.png" alt="Logo of P Cyber Vtem" width="150" height="150">
             </div>
-    
-    
-    
-    
-        </div>
-        </div>
-    
-        <div class="dropdown">
-            <div class="nav-btn">
-                <div class="nav-btn-1">
-                    <a href="index.html">Home</a>
+
+            <div class="dropdown">
+                <div class="nav-btn">
+                    <div class="nav-btn-1">
+                        <a href="index.html">Home</a>
+                    </div>
+
+                    <div class="nav-btn-2">
+                        <a href="cyber-search-docs.html">Documentation</a>
+                    </div>
                 </div>
-    
-                <div class="nav-btn-2">
-                    <a href="cyber-search-docs.html">Documentation</a>
-                </div>
-    
-    
             </div>
-    
-    </header>
-
-
+        </div>
 
 
 
@@ -88,6 +80,21 @@
     
     <script>
         AOS.init();
+    </script>
+
+    <script>
+        // Register the service worker background layer seamlessly on application load
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('[-] PWA Architecture Online. Scope:', registration.scope);
+                    })
+                    .catch((err) => {
+                        console.error('[!] PWA registration layer fault:', err);
+                    });
+            });
+        }
     </script>
 
     <script src="cyber-geo-ip.js"></script>

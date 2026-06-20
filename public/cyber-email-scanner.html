@@ -7,6 +7,15 @@
     <title>Identity Compromise Sweep</title>
     <link rel="stylesheet" href="cyber-email-scanner.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <!-- Theme color for supported browsers. Add MS tile color as a fallback for Windows/IE/Edge. -->
+    <!-- Theme color for supported browsers. Provide light/dark variants for better compatibility -->
+    <meta name="theme-color" content="#06b6d4">
+    <meta name="theme-color" content="#06b6d4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="msapplication-TileColor" content="#06b6d4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 
 <body>
@@ -84,6 +93,21 @@
         AOS.init();
     </script>
 
+
+   <script>
+    // Register the service worker background layer seamlessly on application load
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('[-] PWA Architecture Online. Scope:', registration.scope);
+                })
+                .catch((err) => {
+                    console.error('[!] PWA registration layer fault:', err);
+                });
+        });
+    }
+</script>
     <script src="cyber-email-scanner.js"></script>
 </body>
 
