@@ -30,7 +30,7 @@ async function runNetworkReconnaissance() {
 
     // Set this string to your live endpoint or a relative URI path depending on repository binding
     // E.g., '/api/ip-telemetry' if hosted in a monolithic app layout, or your full live Vercel backend URL
-    const PROD_BACKEND_ENDPOINT = 'http://localhost:5500/api/ip-telemetry';
+    const PROD_BACKEND_ENDPOINT = '/api/ip-telemetry' ;//|| 'http://localhost:5500/api/ip-telemetry'
 
     try {
         const response = await fetch(PROD_BACKEND_ENDPOINT, {
