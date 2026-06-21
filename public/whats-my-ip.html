@@ -7,6 +7,11 @@
     <title>Project Cyber VigilanTeam - IP Telemetry Node</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="whats-my-ip.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
 </head>
 
 <body>
@@ -125,6 +130,11 @@
             <div id="valCurrency" class="metric-value">Resolving fiscal token...</div>
     
         </div>
+
+        <div class="network-section-title">Real-Time Spatial Positioning</div>
+        <div id="reconMap"
+            style="height: 320px; border-radius: 8px; border: 1px solid #1e293b; margin-top: 15px; box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);">
+        </div><br>
     
         <button id="refreshBtn" class="refresh-btn">Re-Authenticate Perimeter</button>
     

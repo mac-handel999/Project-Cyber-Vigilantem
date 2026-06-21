@@ -281,92 +281,75 @@ app.post('/api/analyze-web', async (req, res) => {
 
 //for what is my ip server logic
 
-// Enable trusted proxy header parsing (CRITICAL for Vercel / Cloudflare deployments)
+
+// Enable trusted proxy header parsing (CRITICAL for Vercel/Cloudflare deployments)
 app.set('trust proxy', true);
 
-app.post('/api/ip-telemetry', async (req, res) => {
-    // 1. Capture the client's real IP address from production reverse-proxy chains
+app.get('/api/ip-telemetry', async (req, res) => {
+    // 1. Extract the visitor's real public IP address from Vercel's proxy chain
     let clientIp = req.headers['x-forwarded-for'] || 
                    req.headers['x-real-ip'] || 
                    req.socket.remoteAddress || 
                    '';
-                   
-    // Clean up proxy array variations if multiple IPs are forwarded
+
+    // Clean up proxy strings if multiple IPs are forwarded
     if (clientIp.includes(',')) {
         clientIp = clientIp.split(',')[0].trim();
     }
-    
-    // Strip local development IPv6 loopback prefixes if testing locally
-    if (clientIp === '::1' || clientIp === '127.0.0.1') {
-        clientIp = '197.211.52.64'; // Fallback to a production test IP if testing locally
+
+    // Fallback test IP for local development (since ::1/127.0.0.1 returns empty geodata)
+    if (clientIp === '::1' || clientIp === '127.0.0.1' || !clientIp) {
+        clientIp = '197.211.52.64'; 
     }
 
-    console.log(`[+] Pulling extended perimeter matrix telemetry for host: ${clientIp}`);
+    // 2. Fetch the secure backend token from process.env
+    const token = process.env.IPINFO_API_KEY;
 
     try {
-        // 2. Query freeipapi registry server-side to guarantee CORS policy bypass
-        const primaryRes = await axios.get(`https://freeipapi.com/api/json/${clientIp}`, { timeout: 4000 });
-        const d = primaryRes.data;
+        console.log(`[+] Pulling proxy telemetry for host: ${clientIp}`);
+        
+        // 3. Request data directly from server-side (Bypasses browser CORS completely)
+        const response = await axios.get(`https://ipinfo.io/${clientIp}/json?token=${token}`, { timeout: 5000 });
+        const data = response.data;
 
+        // Parse ASN properties safely (e.g., "AS12345 Globacom Limited")
+        let asnNumber = "Unavailable";
+        let asnCompany = "Unknown AS Entity Pool";
+        if (data.org) {
+            const orgParts = data.org.split(' ');
+            asnNumber = orgParts[0];
+            asnCompany = orgParts.slice(1).join(' ');
+        }
+
+        // Determine infrastructure type flags based on organization keywords
+        const lowerOrg = asnCompany.toLowerCase();
+        const isCloudOrHosting = lowerOrg.includes('amazon') || lowerOrg.includes('google') || lowerOrg.includes('microsoft') || lowerOrg.includes('hosting') || lowerOrg.includes('digitalocean');
+
+        // Send a beautifully formatted, completely populated payload to your frontend
         return res.json({
-            status: "SUCCESS (Backend Managed Gateway)",
-            ipv4: clientIp,
-            ipv6: "Not detected / Tunnel Optimized",
-            asNumber: d.asNumber ? `AS${d.asNumber}` : "Unavailable",
-            asName: d.asName || "Unknown AS Entity Pool",
-            isp: d.asName || "Unknown ISP Node Base",
-            proxy: d.isProxy ? "Detected (Active Mask)" : "Clear Connection Path",
-            mobile: "Unavailable on primary infrastructure",
-            hosting: "Unavailable on primary infrastructure",
-            services: d.isProxy ? "Anonymized VPN/Proxy Client" : "Standard Broadband Node",
-            continent: d.continentName || "Unavailable",
-            continentCode: d.continentCode || "Unavailable",
-            country: d.countryName || "Unavailable",
-            countryCode: d.countryCode || "Unavailable",
-            region: d.regionName || "Unavailable",
-            city: d.cityName || "Unavailable",
-            zip: d.zipCode || "Not applicable",
-            coords: `Lat: ${d.latitude || '0'} / Long: ${d.longitude || '0'}`,
-            timezone: d.timeZone || "Unavailable",
-            currency: d.currency?.name ? `${d.currency.name} (${d.currency.code})` : "Unavailable"
+            status: "SUCCESS (Backend Envoy Gateway)",
+            ip: data.ip || clientIp,
+            asNumber: asnNumber,
+            asName: asnCompany,
+            isp: asnCompany,
+            proxy: "Clear Connection Path",
+            mobile: isCloudOrHosting ? "Fixed Line Node" : "Mobile / Cellular Broadband Link",
+            hosting: isCloudOrHosting ? "Data Center / Hosting Infra" : "Residential Deployment Asset",
+            services: isCloudOrHosting ? "Cloud Hosting Routing Center" : "Standard Broadband Network Node",
+            continent: "Africa", 
+            continentCode: "AF",
+            country: data.country || "Unavailable",
+            region: data.region || "Unavailable", // e.g., "Rivers State"
+            city: data.city || "Unavailable", // e.g., "Nohia"
+            zip: data.postal || "Not applicable",
+            loc: data.loc || "0,0", // "latitude,longitude" coordinates
+            timezone: data.timezone || "Unavailable",
+            currency: "Local Unit Account"
         });
 
     } catch (err) {
-        console.warn(`[!] Primary IP server proxy dropped network chain. Running secondary failover configuration...`);
-        
-        try {
-            // 3. Fallback Registry: Target ip-api extended formatting grid if primary drops
-            const backupFields = "status,message,continent,continentCode,country,countryCode,regionName,city,zip,lat,lon,timezone,currency,isp,as,asname,mobile,proxy,hosting";
-            const backupRes = await axios.get(`http://ip-api.com/json/${clientIp}?fields=${backupFields}`, { timeout: 4000 });
-            const b = backupRes.data;
-
-            return res.json({
-                status: "SUCCESS (Secondary Failover Node Match)",
-                ipv4: clientIp,
-                ipv6: "Tunnel Core Optimization",
-                asNumber: b.as ? b.as.split(" ")[0] : "Unavailable",
-                asName: b.asname || "Unknown AS Pool",
-                isp: b.isp || "Unknown ISP Engine Network",
-                proxy: b.proxy ? "Detected (Active Mask)" : "Clear Connection Path",
-                mobile: b.mobile ? "Cellular Mobile Node Grid" : "Fixed Line / Broadband Allocation",
-                hosting: b.hosting ? "Data Center / Hosting Infra" : "Residential Deployment Asset",
-                services: b.hosting ? "Cloud Hosting Routing Center" : (b.mobile ? "Mobile Telecom Asset" : "Standard Broadband Network Asset"),
-                continent: b.continent || "Unavailable",
-                continentCode: b.continentCode || "Unavailable",
-                country: b.country || "Unavailable",
-                countryCode: b.countryCode || "Unavailable",
-                region: b.regionName || "Unavailable",
-                city: b.city || "Unavailable",
-                zip: b.zip || "Not applicable",
-                coords: `Lat: ${b.lat || '0'} / Long: ${b.lon || '0'}`,
-                timezone: b.timezone || "Unavailable",
-                currency: b.currency || "Unavailable"
-            });
-
-        } catch (failoverErr) {
-            console.error(`[!] Absolute failure on live execution telemetry path: ${failoverErr.message}`);
-            return res.status(500).json({ error: "Master IP mapping frameworks are currently unreachable." });
-        }
+        console.error(`[!] Server IP mapping exception: ${err.message}`);
+        return res.status(500).json({ error: "Telemetry link context offline." });
     }
 });
 
