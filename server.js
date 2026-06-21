@@ -283,75 +283,75 @@ app.post('/api/analyze-web', async (req, res) => {
 
 
 // Enable trusted proxy header parsing (CRITICAL for Vercel/Cloudflare deployments)
-app.set('trust proxy', true);
+// app.set('trust proxy', true);
 
-app.get('/api/ip-telemetry', async (req, res) => {
-    // 1. Extract the visitor's real public IP address from Vercel's proxy chain
-    let clientIp = req.headers['x-forwarded-for'] || 
-                   req.headers['x-real-ip'] || 
-                   req.socket.remoteAddress || 
-                   '';
+// app.get('/api/ip-telemetry', async (req, res) => {
+//     // 1. Extract the visitor's real public IP address from Vercel's proxy chain
+//     let clientIp = req.headers['x-forwarded-for'] || 
+//                    req.headers['x-real-ip'] || 
+//                    req.socket.remoteAddress || 
+//                    '';
 
-    // Clean up proxy strings if multiple IPs are forwarded
-    if (clientIp.includes(',')) {
-        clientIp = clientIp.split(',')[0].trim();
-    }
+//     // Clean up proxy strings if multiple IPs are forwarded
+//     if (clientIp.includes(',')) {
+//         clientIp = clientIp.split(',')[0].trim();
+//     }
 
-    // Fallback test IP for local development (since ::1/127.0.0.1 returns empty geodata)
-    if (clientIp === '::1' || clientIp === '127.0.0.1' || !clientIp) {
-        clientIp = '197.211.52.64'; 
-    }
+//     // Fallback test IP for local development (since ::1/127.0.0.1 returns empty geodata)
+//     if (clientIp === '::1' || clientIp === '127.0.0.1' || !clientIp) {
+//         clientIp = '197.211.52.64'; 
+//     }
 
-    // 2. Fetch the secure backend token from process.env
-    const token = process.env.IPINFO_API_KEY;
+//     // 2. Fetch the secure backend token from process.env
+//     const token = process.env.IPINFO_API_KEY;
 
-    try {
-        console.log(`[+] Pulling proxy telemetry for host: ${clientIp}`);
+//     try {
+//         console.log(`[+] Pulling proxy telemetry for host: ${clientIp}`);
         
-        // 3. Request data directly from server-side (Bypasses browser CORS completely)
-        const response = await axios.get(`https://ipinfo.io/${clientIp}/json?token=${token}`, { timeout: 5000 });
-        const data = response.data;
+//         // 3. Request data directly from server-side (Bypasses browser CORS completely)
+//         const response = await axios.get(`https://ipinfo.io/${clientIp}/json?token=${token}`, { timeout: 5000 });
+//         const data = response.data;
 
-        // Parse ASN properties safely (e.g., "AS12345 Globacom Limited")
-        let asnNumber = "Unavailable";
-        let asnCompany = "Unknown AS Entity Pool";
-        if (data.org) {
-            const orgParts = data.org.split(' ');
-            asnNumber = orgParts[0];
-            asnCompany = orgParts.slice(1).join(' ');
-        }
+//         // Parse ASN properties safely (e.g., "AS12345 Globacom Limited")
+//         let asnNumber = "Unavailable";
+//         let asnCompany = "Unknown AS Entity Pool";
+//         if (data.org) {
+//             const orgParts = data.org.split(' ');
+//             asnNumber = orgParts[0];
+//             asnCompany = orgParts.slice(1).join(' ');
+//         }
 
-        // Determine infrastructure type flags based on organization keywords
-        const lowerOrg = asnCompany.toLowerCase();
-        const isCloudOrHosting = lowerOrg.includes('amazon') || lowerOrg.includes('google') || lowerOrg.includes('microsoft') || lowerOrg.includes('hosting') || lowerOrg.includes('digitalocean');
+//         // Determine infrastructure type flags based on organization keywords
+//         const lowerOrg = asnCompany.toLowerCase();
+//         const isCloudOrHosting = lowerOrg.includes('amazon') || lowerOrg.includes('google') || lowerOrg.includes('microsoft') || lowerOrg.includes('hosting') || lowerOrg.includes('digitalocean');
 
-        // Send a beautifully formatted, completely populated payload to your frontend
-        return res.json({
-            status: "SUCCESS (Backend Envoy Gateway)",
-            ip: data.ip || clientIp,
-            asNumber: asnNumber,
-            asName: asnCompany,
-            isp: asnCompany,
-            proxy: "Clear Connection Path",
-            mobile: isCloudOrHosting ? "Fixed Line Node" : "Mobile / Cellular Broadband Link",
-            hosting: isCloudOrHosting ? "Data Center / Hosting Infra" : "Residential Deployment Asset",
-            services: isCloudOrHosting ? "Cloud Hosting Routing Center" : "Standard Broadband Network Node",
-            continent: "Africa", 
-            continentCode: "AF",
-            country: data.country || "Unavailable",
-            region: data.region || "Unavailable", // e.g., "Rivers State"
-            city: data.city || "Unavailable", // e.g., "Nohia"
-            zip: data.postal || "Not applicable",
-            loc: data.loc || "0,0", // "latitude,longitude" coordinates
-            timezone: data.timezone || "Unavailable",
-            currency: "Local Unit Account"
-        });
+//         // Send a beautifully formatted, completely populated payload to your frontend
+//         return res.json({
+//             status: "SUCCESS (Backend Envoy Gateway)",
+//             ip: data.ip || clientIp,
+//             asNumber: asnNumber,
+//             asName: asnCompany,
+//             isp: asnCompany,
+//             proxy: "Clear Connection Path",
+//             mobile: isCloudOrHosting ? "Fixed Line Node" : "Mobile / Cellular Broadband Link",
+//             hosting: isCloudOrHosting ? "Data Center / Hosting Infra" : "Residential Deployment Asset",
+//             services: isCloudOrHosting ? "Cloud Hosting Routing Center" : "Standard Broadband Network Node",
+//             continent: "Africa", 
+//             continentCode: "AF",
+//             country: data.country || "Unavailable",
+//             region: data.region || "Unavailable", // e.g., "Rivers State"
+//             city: data.city || "Unavailable", // e.g., "Nohia"
+//             zip: data.postal || "Not applicable",
+//             loc: data.loc || "0,0", // "latitude,longitude" coordinates
+//             timezone: data.timezone || "Unavailable",
+//             currency: "Local Unit Account"
+//         });
 
-    } catch (err) {
-        console.error(`[!] Server IP mapping exception: ${err.message}`);
-        return res.status(500).json({ error: "Telemetry link context offline." });
-    }
-});
+//     } catch (err) {
+//         console.error(`[!] Server IP mapping exception: ${err.message}`);
+//         return res.status(500).json({ error: "Telemetry link context offline." });
+//     }
+// });
 
 
 module.exports = app;
