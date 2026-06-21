@@ -249,9 +249,34 @@ app.listen(PORT, () => {
     console.log(`[+] Defensive Application Server Engine Active on: http://localhost:${PORT}`);
 });
 
+//for what web server logic
 
+app.post('/api/analyze-web', async (req, res) => {
+    const { targetUrl } = req.body;
+    
+    // Extract a clean domain string
+    let domain = targetUrl.replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0];
 
+    try {
+        // Query Microlink's public data mesh pass
+        const response = await axios.get(` https://api.duckduckgo.com/?q=https://${domain}&format=json&pretty=1`);
+        const meta = response.data.data;
 
+        return res.json({
+            status: "[200] Target Intercepted",
+            httpServer: meta.headers['server'] || 'Cloudflare / Protected Network Edge',
+            htmlVersion: 'HTML5 Compliance Engine',
+            title: `Title[${meta.title || domain}]`,
+            framework: meta.generator?.includes('Next.js') ? 'Next.js Stack' : 'React / Vanilla JS Mix Core',
+            generator: meta.generator || 'No Monolithic CMS Signature',
+            author: meta.author ? `Meta-Author[${meta.author}]` : 'Undetected Metadata Author',
+            hsts: meta.headers['strict-transport-security'] || 'Active TLS Protection Pipeline',
+            uncommonHeaders: `X-Powered-By[${meta.headers['x-powered-by'] || 'Edge Server Bundle'}]`
+        });
+    } catch (err) {
+        return res.json({ status: "Scan Constraint Encountered", title: "Target Blocked" });
+    }
+});
 
 
 

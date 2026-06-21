@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00ffcc" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#030712" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="neonGlowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="32" fill="#0b0c10"/>
+  
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+  <circle cx="256" cy="256" r="120" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+  <circle cx="256" cy="256" r="60" fill="none" stroke="#1e293b" stroke-width="1"/>
+
+  <polygon points="256,40 452,130 452,382 256,472 60,382 60,130" 
+           fill="none" stroke="#1e293b" stroke-width="4"/>
+           
+  <polygon points="256,60 432,140 432,372 256,452 80,372 80,140" 
+           fill="none" stroke="#06b6d4" stroke-width="2.5" opacity="0.6" stroke-dasharray="8,4"/>
+
+  <line x1="256" y1="60" x2="256" y2="452" stroke="#1e293b" stroke-width="2"/>
+  <line x1="60" y1="256" x2="452" y2="256" stroke="#1e293b" stroke-width="2"/>
+  
+  <path d="M 216 60 L 256 100 L 296 60" fill="none" stroke="#06b6d4" stroke-width="2" opacity="0.4"/>
+  <path d="M 216 452 L 256 412 L 296 452" fill="none" stroke="#06b6d4" stroke-width="2" opacity="0.4"/>
+
+  <circle cx="256" cy="256" r="30" fill="none" stroke="#06b6d4" stroke-width="3" filter="url(#neonGlowCyan)"/>
+  <circle cx="256" cy="256" r="8" fill="#06b6d4"/>
+
+  <circle cx="345" cy="180" r="45" fill="url(#coreGlow)"/>
+  <line x1="315" y1="180" x2="375" y2="180" stroke="#00ffcc" stroke-width="1.5" opacity="0.7"/>
+  <line x1="345" y1="150" x2="345" y2="210" stroke="#00ffcc" stroke-width="1.5" opacity="0.7"/>
+  <circle cx="345" cy="180" r="18" fill="none" stroke="#00ffcc" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.8"/>
+  <circle cx="345" cy="180" r="8" fill="none" stroke="#00ffcc" stroke-width="2"/>
+  <circle cx="345" cy="180" r="4" fill="#ffffff"/>
+
+  <text x="256" y="400" fill="#64748b" font-family="'Courier New', monospace" font-size="14" font-weight="bold" letter-spacing="4" text-anchor="middle">
+    SYS.LOC // 127.0.0.1
+  </text>
+</svg>
