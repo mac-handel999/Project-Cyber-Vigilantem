@@ -11,6 +11,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="Images/Project_Cyber-logo.png">
     <!-- theme-color meta removed for broader browser compatibility (not supported by some browsers) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
 <body>
@@ -53,10 +57,19 @@
     
         <div id="geoLogOutput" class="terminal-box hidden"></div>
     
-        <div id="geoMapWrapper" class="map-frame hidden">
+        <!-- <div id="geoMapWrapper" class="map-frame hidden">
             <h3>📍 RESOLVED SATELLITE LOCATOR MATRIX</h3>
             <div class="map-container">
                 <img id="geoStaticMap" src="" alt="Target Geolocation Grid">
+            </div>
+        </div> -->
+
+        <div id="geoMapWrapper" class="hidden" style="margin-top: 20px;">
+            <div class="network-section-title" style="margin-bottom: 10px; font-family: monospace; color: #64748b;">
+                [+] REAL-TIME SPATIAL POSITIONING TARGET NODE
+            </div>
+            <div id="liveGeoMap"
+                style="height: 380px; width: 100%; border-radius: 8px; border: 1px solid #1e293b; background-color: #0b0c10; box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);">
             </div>
         </div>
     </div>
