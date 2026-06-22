@@ -364,3 +364,18 @@ font-weight: bold;
     margin: 20px;
     padding: 20px;
 }
+
+.github {
+    margin: 20px auto;
+    padding: 10px;
+    text-align: center;
+}
+
+.git {
+    color: #fff;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: #0a1128;
+}

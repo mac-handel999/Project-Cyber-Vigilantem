@@ -6,7 +6,13 @@
   "permissions": [
     "webNavigation",
     "tabs",
-    "storage"
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://*.vercel.app/*",
+    "https://api.ipinfo.io/*",
+    "https://*.basemaps.cartocdn.com/*"
   ],
   "background": {
     "service_worker": "background.js"

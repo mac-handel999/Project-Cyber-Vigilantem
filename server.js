@@ -354,4 +354,117 @@ app.post('/api/analyze-web', async (req, res) => {
 // });
 
 
+
+const tls = require('node:tls'); // Native cryptographic socket engine
+// const axios = require('axios');
+
+// Unified WHOIS + SSL Recon Architecture Node
+app.post('/api/whois', async (req, res) => {
+    const { domain } = req.body;
+
+    if (!domain) {
+        return res.status(400).json({ error: "Missing target host criteria." });
+    }
+
+    // Clean up input string vectors
+    const rawTarget = domain.trim().replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0];
+
+    // Regex check to accurately identify IPv4 / IPv6 syntax parameters
+    const ipRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$|^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/;
+    const isIpAddress = ipRegex.test(rawTarget);
+
+    try {
+        let rdapUrl = `https://rdap.org/domain/${rawTarget}`;
+        let sslData = { status: "NOT APPLICABLE (IP Node)", issuer: "N/A", expires: "N/A", daysRemaining: "N/A" };
+
+        if (isIpAddress) {
+            // Re-route RDAP endpoint block tracking matrix if target is an IP address
+            rdapUrl = `https://rdap.org/ip/${rawTarget}`;
+        }
+
+        console.log(`[+] Running dual vector scan [IP: ${isIpAddress}] against host: ${rawTarget}`);
+
+        // 1. Fetch Registry Records via RDAP Mesh Proxy
+        const rdapResponse = await axios.get(rdapUrl, { timeout: 6000 });
+        const d = rdapResponse.data;
+
+        // 2. Execute Local TLS Socket Handshake if the target is a Domain
+        if (!isIpAddress) {
+            sslData = await checkSslCertificate(rawTarget);
+        }
+
+        // Parse Entity Registrars or Network Assignment Providers out of the layout schema
+        const registrarEntity = d.entities?.find(e => e.roles?.includes('registrar') || e.roles?.includes('registrant'));
+        const providerName = registrarEntity?.vcardArray?.[1]?.find(v => v[0] === 'fn')?.[3] || "Undisclosed Registry Group";
+
+        const createdEvent = d.events?.find(e => e.eventAction === 'registration');
+        const expiryEvent = d.events?.find(e => e.eventAction === 'expiration');
+
+        return res.json({
+            success: true,
+            isIp: isIpAddress,
+            target: rawTarget.toUpperCase(),
+            provider: providerName,
+            created: createdEvent ? new Date(createdEvent.eventDate).toDateString() : "Unavailable / Hidden",
+            expires: expiryEvent ? new Date(expiryEvent.eventDate).toDateString() : "Unavailable / Open Alloc",
+            status: d.status ? d.status.join(' | ').toUpperCase() : "ACTIVE ASSIGNMENT",
+            ssl: sslData,
+            raw_log: JSON.stringify(d, null, 2)
+        });
+
+    } catch (err) {
+        console.error(`[!] Recon operational drop: ${err.message}`);
+        return res.json({
+            success: false,
+            error: "Host record signature unreachable or structurally unmapped at root levels."
+        });
+    }
+});
+
+// Helper Function: Native cryptographic certificate resolution wrapper
+function checkSslCertificate(hostname) {
+    return new Promise((resolve) => {
+        const options = {
+            servername: hostname, // SNI handshake support context enforcement
+            rejectUnauthorized: false, // Prevents self-signed edge cases from crashing the script pipe
+            minVersion: 'TLSv1.2'
+        };
+
+        const socket = tls.connect(443, hostname, options, () => {
+            const cert = socket.getPeerCertificate(); // Capture binary X509 parameters safely
+            
+            if (!cert || Object.keys(cert).length === 0) {
+                resolve({ status: "UNAVAILABLE / NO PORT 443 LISTENER", issuer: "Unknown", expires: "N/A", daysRemaining: "N/A" });
+                socket.destroy();
+                return;
+            }
+
+            const expiryDate = new Date(cert.valid_to); //
+            const today = new Date();
+            const timeDiff = expiryDate - today;
+            const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+            resolve({
+                status: daysRemaining > 0 ? "VALID SECURE LAYER" : "EXPIRED WARNING",
+                issuer: cert.issuer.CN || cert.issuer.O || "Unknown Authority",
+                expires: expiryDate.toDateString(),
+                daysRemaining: daysRemaining
+            });
+            socket.destroy();
+        });
+
+        socket.on('error', (err) => {
+            resolve({ status: `HANDSHAKE FAILED (${err.code || 'TIMEOUT'})`, issuer: "None", expires: "N/A", daysRemaining: "N/A" });
+            socket.destroy();
+        });
+
+        // Set short timeout bounds to prevent hanging background micro-threads
+        socket.setTimeout(4000, () => {
+            resolve({ status: "CONNECTION TIMEOUT", issuer: "N/A", expires: "N/A", daysRemaining: "N/A" });
+            socket.destroy();
+        });
+    });
+}
+
+
 module.exports = app;

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Cyber VigilanTeam - WHO IS </title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="who-is.css">
+   
+</head>
+
+<body>
+
+    <header>
+        <div class="header">
+            <div class="logo">
+                <img class="logo-img" src="/public\Images\Project_Cyber-logo.png" alt=" Logo of P Cyber Vtem"
+                    width="150px" height="150px">
+
+            </div>
+
+
+
+
+        </div>
+        </div>
+
+        <div class="dropdown">
+            <div class="nav-btn-1">
+                <a href="index.html">Home</a>
+            </div>
+
+
+            <div class="nav-btn-2">
+                <a href="cyber-search-docs.html">Documentation</a>
+            </div>
+
+
+        </div>
+
+    </header>
+
+
+
+
+
+
+
+<div class="cyber-panel">
+    <div class="panel-header">[+] CORE RECONNAISSANCE // DOMAIN & IP WHOIS MATRIX</div>
+
+    <div style="margin: 15px 0; display: flex; gap: 10px;">
+        <input type="text" id="whoisTargetInput" placeholder="Enter Target Domain (e.g., google.com) or IP (e.g., 8.8.8.8)"
+            style="flex: 1; padding: 10px; background: #0b0c10; border: 1px solid #1e293b; color: #00ffcc; font-family: monospace; border-radius: 4px;">
+        <button id="whoisScanBtn"
+            style="padding: 10px 20px; background: #06b6d4; border: none; color: #0b0c10; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px;">
+            EXECUTE TRACE
+        </button>
+    </div>
+
+    <div id="whoisSpinner" class="hidden" style="color: #ffaa00; font-family: monospace; margin: 10px 0;">
+        >>> Querying registry root shards... Intercepting packet blocks...
+    </div>
+
+    <div id="whoisResultWrapper" class="hidden" style="margin-top: 15px;">
+        <table
+            style="width: 100%; border-collapse: collapse; font-family: monospace; font-size: 13px; margin-bottom: 20px;">
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #64748b;">DOMAIN TARGET:</td>
+                <td id="resDomain" style="padding: 8px; color: #ffffff; text-align: right;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #64748b;">CORE REGISTRAR:</td>
+                <td id="resRegistrar" style="padding: 8px; color: #00ffcc; text-align: right;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #64748b;">CREATION TIMESTAMP:</td>
+                <td id="resCreated" style="padding: 8px; color: #ffffff; text-align: right;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #64748b;">EXPIRATION THRESHOLD:</td>
+                <td id="resExpires" style="padding: 8px; color: #ffffff; text-align: right;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #64748b;">LAST PROFILE UPDATE:</td>
+                <td id="resUpdated" style="padding: 8px; color: #ffffff; text-align: right;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #64748b;">REGISTRY FLAGS / STATUS:</td>
+                <td id="resStatus" style="padding: 8px; color: #ffaa00; text-align: right;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 8px; color: #64748b;">NAMESERVER HOOKS:</td>
+                <td id="resNameservers" style="padding: 8px; color: #06b6d4; text-align: right; font-size: 11px;">-</td>
+            </tr>
+
+            <tr style="border-bottom: 1px solid #1e293b; background: rgba(6, 182, 212, 0.02);">
+                <td style="padding: 12px 16px; color: #06b6d4; font-size: 12px; font-weight: bold;">[SSL] CERTIFICATE STATUS:</td>
+                <td id="resSslStatus" style="padding: 12px 16px; text-align: right; font-weight: bold;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #64748b;">[SSL] ISSUING AUTHORITY:</td>
+                <td id="resSslIssuer" style="padding: 12px 16px; color: #ffffff; text-align: right;">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #1e293b;">
+                <td style="padding: 12px 16px; color: #64748b;">[SSL] EXPIRE THRESHOLD:</td>
+                <td id="resSslExpires" style="padding: 12px 16px; color: #ffffff; text-align: right;">-</td>
+            </tr>
+        </table>
+
+        <div style="color: #64748b; font-family: monospace; font-size: 12px; margin-bottom: 5px;">[+] RAW STRUCT RECON
+            JSON LOG DUMP:</div>
+        <pre id="whoisRawLog"
+            style="background: #050508; border: 1px solid #1e293b; color: #a1a1aa; padding: 15px; font-family: monospace; font-size: 11px; overflow-x: auto; max-height: 250px; border-radius: 4px;"></pre>
+    </div>
+</div>
+
+
+
+
+<div class="footer">
+
+    <br>
+    <h3>PRODUCT OF : {FABIAN CODES HQ} || fabikechukwuemeana@gmail.com</h3> <br>
+
+    <br>
+    <small>&copy; 2026 Project Cyber Vigilan-Teem | All rights reserved.</small>
+</div>
+
+
+<script src="who-is.js"></script>
+</body>
+
+</html>

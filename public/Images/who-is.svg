@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cyberCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="100%" stop-color="#4facfe" />
+    </linearGradient>
+    <linearGradient id="neonMint" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00ffcc" />
+      <stop offset="100%" stop-color="#00b3ff" />
+    </linearGradient>
+    <linearGradient id="darkShield" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#111827" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#070a12" stop-opacity="0.95" />
+    </linearGradient>
+
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#05070f" rx="8" />
+  
+  <g stroke="#1e293b" stroke-width="0.5" opacity="0.3">
+    <line x1="0" y1="50" x2="800" y2="50" />
+    <line x1="0" y1="150" x2="800" y2="150" />
+    <line x1="0" y1="250" x2="800" y2="250" />
+    <line x1="150" y1="0" x2="150" y2="300" />
+    <line x1="480" y1="0" x2="480" y2="300" />
+  </g>
+
+  <g transform="translate(15, 0)">
+    <circle cx="110" cy="150" r="75" fill="none" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="110" cy="150" r="65" fill="url(#darkShield)" stroke="url(#cyberCyan)" stroke-width="1" stroke-dasharray="10, 15" opacity="0.7" />
+    
+    <path d="M 110 65 L 110 75 M 110 225 L 110 235 M 25 150 L 35 150 M 185 150 L 195 150" stroke="#00ffcc" stroke-width="2" />
+    
+    <ellipse cx="110" cy="150" rx="45" ry="15" fill="none" stroke="#1e293b" stroke-width="1" />
+    <ellipse cx="110" cy="150" rx="15" ry="45" fill="none" stroke="#1e293b" stroke-width="1" />
+    <line x1="65" y1="150" x2="155" y2="150" stroke="#1e293b" stroke-width="1" />
+    <line x1="110" y1="105" x2="110" y2="195" stroke="#1e293b" stroke-width="1" />
+
+    <path d="M 90 115 L 130 115 L 135 125 L 135 180 L 110 195 L 85 180 L 85 125 Z" fill="#070a12" stroke="url(#neonMint)" stroke-width="2" filter="url(#subtleGlow)" />
+    
+    <line x1="97" y1="135" x2="123" y2="135" stroke="#ffffff" stroke-width="1.5" opacity="0.9" />
+    <line x1="97" y1="147" x2="118" y2="147" stroke="#00ffcc" stroke-width="1.5" />
+    <line x1="97" y1="159" x2="123" y2="159" stroke="#00f2fe" stroke-width="1.5" />
+    <line x1="97" y1="171" x2="110" y2="171" stroke="#ffffff" stroke-width="1.5" opacity="0.7" />
+
+    <circle cx="110" cy="150" r="50" fill="none" stroke="#00ffcc" stroke-width="1" opacity="0.4" filter="url(#subtleGlow)" />
+  </g>
+
+  <g transform="translate(230, 0)">
+    <text x="0" y="90" fill="#64748b" font-family="Consolas, 'Courier New', monospace" font-size="13" font-weight="bold" letter-spacing="3">
+      SYSTEM.RECON // ENGINE_NODE_03
+    </text>
+
+    <text x="0" y="165" fill="url(#neonMint)" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif" font-size="64" font-weight="900" letter-spacing="4" filter="url(#neonGlow)">
+      WHOIS
+    </text>
+    
+    <text x="215" y="165" fill="#ffffff" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif" font-size="64" font-weight="300" letter-spacing="2">
+      MATRIX
+    </text>
+
+    <text x="3" y="215" fill="#00f2fe" font-family="Consolas, 'Courier New', monospace" font-size="13" font-weight="600" letter-spacing="1">
+      [STATUS] <tspan fill="#ffffff">ACTIVE SWARM</tspan>  |  [PORT] <tspan fill="#ffffff">443_SSL_ACK</tspan>  |  [TARGET] <tspan fill="#00ffcc">DOMAIN_OR_IP</tspan>
+    </text>
+
+    <rect x="525" y="199" width="12" height="18" fill="#00ffcc" opacity="0.8" filter="url(#subtleGlow)">
+      <animate attributeName="opacity" values="0.8;0.1;0.8" dur="1.2s" repeatCount="indefinite" />
+    </rect>
+
+    <path d="M -20 65 L -35 65 L -35 235 L -20 235" fill="none" stroke="#1e293b" stroke-width="1.5" />
+    <path d="M 545 65 L 560 65 L 560 235 L 545 235" fill="none" stroke="#1e293b" stroke-width="1.5" />
+  </g>
+</svg>
