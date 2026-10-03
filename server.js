@@ -139,7 +139,7 @@ app.post('/api/research', async (req, res) => {
                 { role: "system", content: "You are a cybersecurity expert. Identify potential IOCs (Indicators of Compromise), TTPs (Tatics,Techiques, and Procedures) and recommended remediation steps from the provided context." },
                 { role: "user", content: `Analyze this threat intelligence: ${context}` }
             ],
-            model: "llama-3.3-70b-versatile", // This is one of Groq's best models
+            model: "openai/gpt-oss-120b", // This is one of Groq's best models
         });
 
         res.json({ report: chatCompletion.choices[0].message.content });
@@ -215,7 +215,7 @@ app.post('/api/generate-roadmap', async (req, res) => {
                 { role: "system", content: "You are a Senior Cybersecurity Mentor. Output ONLY a valid JSON object. Format: { weeks: [{ week: number, topic: string, videos: [{title: string, link: string}], web: [{title: string, link: string}] }] }. Provide 3+ high-quality links per category." },
                 { role: "user", content: `Create an 26-week roadmap for ${goal} using these resources: ${JSON.stringify(resourcesContext)}` }
             ],
-            model: "llama-3.3-70b-versatile",
+            model: "openai/gpt-oss-120b",
             response_format: { type: "json_object" }
         });
 
