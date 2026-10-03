@@ -4,113 +4,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoIP Recon Matrix</title>
-    <link rel="stylesheet" href="cyber-geo-ip.css">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" sizes="180x180" href="Images/Project_Cyber-logo.png">
-    <!-- theme-color meta removed for broader browser compatibility (not supported by some browsers) -->
+    <meta name="description" content="Resolve an IP address or domain into ISP, country, coordinates and an interactive map of the hosting node.">
+    <title>Geo IP Recon Scanner // Project Cyber Vigilan-Teem</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#04070f">
+    <!-- Project artwork used for browser and OS icons -->
+    <link rel="icon" href="Images/Project_Cyber-logo.png" type="image/png">
+    <link rel="icon" href="Images/Project%20Cyber%20Vigilan-Teem%20logo.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="Images/Project_Cyber-logo.png">
+    <meta name="msapplication-TileColor" content="#04070f">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script src="theme-boot.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="tool.css">
+    <link rel="stylesheet" href="cyber-geo-ip.css">
 </head>
 
 <body>
+    <a class="visually-hidden" href="#main">Skip to content</a>
 
-    <header>
-        <div class="header">
-            <div class="logo">
-                <img class="logo-img" src="Images/Project_Cyber-logo.png" alt="Logo of P Cyber Vtem" width="150" height="150">
+    <header class="site-header">
+        <div class="shell site-header__inner">
+            <a class="brand" href="index.html">
+                <img class="brand__mark" src="Images/Project_Cyber-logo.png" alt="Project Cyber Vigilan-Teem logo"
+                    width="46" height="46">
+                <span class="brand__text">
+                    <span class="brand__name">Cyber Vigilan-Teem</span>
+                    <span class="brand__tag">Intelligence Hub</span>
+                </span>
+            </a>
+
+            <nav class="site-nav" id="site-nav" aria-label="Primary">
+                <a class="site-nav__link" href="index.html">Home</a>
+                <a class="site-nav__link" href="cyber-search.html">Threat Research</a>
+                <a class="site-nav__link" href="project.html">URL Checker</a>
+                <a class="site-nav__link" href="cyber-geo-ip.html" aria-current="page">Recon</a>
+                <a class="site-nav__link" href="cyber-search-docs.html">Docs</a>
+            </nav>
+
+            <div class="header__actions">
+                <button class="theme-toggle" type="button" data-theme-toggle>
+                    <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                        </svg>
+                    </span>
+                    <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="4" />
+                            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+                        </svg>
+                    </span>
+                    <span class="theme-toggle__label" data-theme-label>Dark</span>
+                </button>
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation"
+                    aria-controls="site-nav" aria-expanded="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" aria-hidden="true">
+                        <path d="M3 6h18M3 12h18M3 18h18" />
+                    </svg>
+                </button>
             </div>
+        </div>
+    </header>
 
-            <div class="dropdown">
-                <div class="nav-btn">
-                    <div class="nav-btn-1">
-                        <a href="index.html">Home</a>
-                    </div>
-
-                    <div class="nav-btn-2">
-                        <a href="cyber-search-docs.html">Documentation</a>
-                    </div>
+    <main id="main" class="page">
+        <div class="shell--narrow shell">
+            <section class="tool-head">
+                <div class="tool-head__meta">
+                    <span class="badge"><span class="badge__dot"></span>Passive lookup</span>
+                    <span class="badge">HackerTarget</span>
                 </div>
+                <p class="section__eyebrow">Module 05</p>
+                <h1 class="tool-head__title">Geo IP Recon Scanner</h1>
+                <p class="tool-head__lead">
+                    Resolve an IP address or domain name into its hosting infrastructure, geographic coordinates and an
+                    interactive map of the node.
+                </p>
+            </section>
+
+            <section class="panel panel--glow panel--rail">
+                <form class="scan-form" id="geo-form">
+                    <label class="field__label" for="geoTargetInput">Target IP or domain</label>
+                    <div class="field">
+                        <input class="input field__control" type="text" id="geoTargetInput" name="target"
+                            placeholder="8.8.8.8 or target-site.com" autocomplete="off" spellcheck="false">
+                        <button class="btn btn--primary" type="submit" id="geoScanBtn">Initiate scan</button>
+                    </div>
+                    <p class="scan-form__hint">
+                        GeoIP data describes infrastructure locations such as data centres and ISP hubs, not the physical
+                        address of an individual.
+                    </p>
+                </form>
+            </section>
+
+            <div id="geoSpinner" class="loading hidden" role="status">
+                <span class="loading__ring" aria-hidden="true"></span>
+                Parsing network trajectory vectors...
+            </div>
+
+            <div id="geoLogOutput" class="log log__scroll hidden"></div>
+
+            <section id="geoMapWrapper" class="map-section hidden">
+                <p class="related__title">Spatial positioning of target node</p>
+                <div id="liveGeoMap" class="map-frame"></div>
+            </section>
+
+            <section class="related">
+                <p class="related__title">Related</p>
+                <ul class="related__list">
+                    <li><a class="related__link" href="whats-my-ip.html">My IP telemetry</a></li>
+                    <li><a class="related__link" href="who-is.html">WHOIS lookup</a></li>
+                    <li><a class="related__link" href="what-web.html">WhatWeb scanner</a></li>
+                    <li><a class="related__link" href="cyber-search-docs.html">Geo IP documentation</a></li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell">
+            <div class="site-footer__grid">
+                <div>
+                    <p class="site-footer__heading">Geo IP Recon Scanner</p>
+                    <p class="site-footer__note">
+                        Coordinates identify infrastructure, not people. Use the results to understand how a target is
+                        hosted and routed.
+                    </p>
+                </div>
+
+                <nav aria-label="Footer">
+                    <p class="site-footer__heading">Modules</p>
+                    <ul class="site-footer__list">
+                        <li><a href="whats-my-ip.html">My IP telemetry</a></li>
+                        <li><a href="who-is.html">WHOIS lookup</a></li>
+                        <li><a href="cyber-search-docs.html">Documentation</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="site-footer__bottom">
+                <small>&copy; 2026 Project Cyber Vigilan-Teem. All rights reserved.</small>
+                <span class="site-footer__contact">
+                    Educational use only &mdash;
+                    <a href="mailto:fabikechkwuemeana@gmail.com">fabikechkwuemeana@gmail.com</a>
+                </span>
             </div>
         </div>
-
-
-
-    <div class="recon-container">
-        <header class="module-header">
-            <h1>📡 GEOIP RECONNAISSANCE MATRIX</h1>
-            <p>Passive target localization & telemetry sweep engine</p>
-        </header>
-    
-        <div class="input-panel">
-            <input type="text" id="geoTargetInput" placeholder="Enter Target Domain or IP Address (e.g., 8.8.8.8)">
-            <button id="geoScanBtn" onclick="executeGeoScan()">INITIATE SCAN</button>
-        </div>
-    
-        <div id="geoSpinner" class="loading-spinner hidden">
-            <div class="pulse-ring"></div> Parsing Network Trajectory Vectors...
-        </div>
-    
-        <div id="geoLogOutput" class="terminal-box hidden"></div>
-    
-        <!-- <div id="geoMapWrapper" class="map-frame hidden">
-            <h3>📍 RESOLVED SATELLITE LOCATOR MATRIX</h3>
-            <div class="map-container">
-                <img id="geoStaticMap" src="" alt="Target Geolocation Grid">
-            </div>
-        </div> -->
-
-        <div id="geoMapWrapper" class="hidden" style="margin-top: 20px;">
-            <div class="network-section-title" style="margin-bottom: 10px; font-family: monospace; color: #64748b;">
-                [+] REAL-TIME SPATIAL POSITIONING TARGET NODE
-            </div>
-            <div id="liveGeoMap"
-                style="height: 380px; width: 100%; border-radius: 8px; border: 1px solid #1e293b; background-color: #0b0c10; box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);">
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="footer">
-    
-        <br>
-        <h3>PRODUCT OF : {FABIAN CODES HQ} || fabikechukwuemeana@gmail.com</h3> <br>
-    
-        <br>
-        <small>&copy; 2026 Project Cyber Vigilan-Teem | All rights reserved.</small>
-    </div>
-    
-   
-
-    </script>
-    
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <script>
-        AOS.init();
-    </script>
-
-    <script>
-        // Register the service worker background layer seamlessly on application load
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then((registration) => {
-                        console.log('[-] PWA Architecture Online. Scope:', registration.scope);
-                    })
-                    .catch((err) => {
-                        console.error('[!] PWA registration layer fault:', err);
-                    });
-            });
-        }
-    </script>
+    </footer>
 
     <script src="cyber-geo-ip.js"></script>
+    <script src="theme.js"></script>
 </body>
 
 </html>

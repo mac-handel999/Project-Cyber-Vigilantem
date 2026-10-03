@@ -1,0 +1,396 @@
+/* ==========================================================================
+   PROJECT CYBER VIGILANTEEM — DOCUMENTATION
+   Two-column reference layout: sticky section nav beside the article column.
+   ========================================================================== */
+
+.docs-layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+}
+
+/* --------------------------------------------------------------------------
+   SECTION NAV
+   -------------------------------------------------------------------------- */
+
+.docs-nav {
+    position: sticky;
+    top: 6.5rem;
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.docs-nav__title {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.7rem;
+}
+
+.docs-nav__list {
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.15rem;
+}
+
+.docs-nav__list li {
+    margin: 0;
+}
+
+.docs-nav__list a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    border-radius: 7px;
+    border-left: 2px solid transparent;
+    font-size: 0.86rem;
+    color: var(--text-dim);
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.docs-nav__list a:hover {
+    color: var(--text-strong);
+    background: var(--accent-softer);
+}
+
+.docs-nav__list a.is-active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-left-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   HEADER
+   -------------------------------------------------------------------------- */
+
+.docs-header {
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.docs-header__lead {
+    max-width: 68ch;
+    margin-top: 0.6rem;
+    color: var(--text-dim);
+}
+
+/* --------------------------------------------------------------------------
+   SECTIONS
+   -------------------------------------------------------------------------- */
+
+.docs-content {
+    min-width: 0;
+}
+
+.docs-section {
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    scroll-margin-top: 6.5rem;
+}
+
+.docs-section__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.docs-section__head h2 {
+    font-size: 1.35rem;
+}
+
+.docs-section h3 {
+    margin: 1.6rem 0 0.6rem;
+    font-size: 1rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    color: var(--accent);
+}
+
+.docs-section p {
+    max-width: 74ch;
+    margin-bottom: 0.85rem;
+    font-size: 0.93rem;
+    color: var(--text-dim);
+}
+
+.docs-section p strong {
+    color: var(--text-strong);
+    font-weight: 600;
+}
+
+.docs-section ul,
+.docs-section ol {
+    max-width: 74ch;
+    margin-bottom: 0.85rem;
+}
+
+.docs-section li {
+    margin-bottom: 0.4rem;
+    font-size: 0.91rem;
+    color: var(--text-dim);
+}
+
+.steps-list {
+    counter-reset: step;
+    padding-left: 0;
+    list-style: none;
+}
+
+.steps-list li {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 0.75rem;
+    counter-increment: step;
+}
+
+.steps-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   TABLES
+   -------------------------------------------------------------------------- */
+
+.data-table {
+    width: 100%;
+    margin: 1rem 0;
+    border-collapse: collapse;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.88rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.7rem 0.9rem;
+    text-align: start;
+    border-bottom: 1px solid var(--line);
+}
+
+.data-table thead th {
+    background: var(--surface-2);
+    color: var(--text-strong);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.data-table tbody td:first-child {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+.data-table tbody td {
+    color: var(--text-dim);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.data-table tbody tr:hover {
+    background: var(--accent-softer);
+}
+
+/* --------------------------------------------------------------------------
+   CALLOUTS
+   -------------------------------------------------------------------------- */
+
+.callout {
+    padding: 1.1rem 1.3rem;
+    margin: 1.25rem 0;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    background: var(--surface-2);
+}
+
+.callout__title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem !important;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent) !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.callout p {
+    margin-bottom: 0.6rem;
+    font-size: 0.88rem !important;
+}
+
+.callout p:last-child {
+    margin-bottom: 0;
+}
+
+.callout ul {
+    margin-bottom: 0;
+}
+
+.callout__code {
+    display: block;
+    margin-top: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    background: var(--surface-inset);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    word-break: break-all;
+}
+
+.callout--warn {
+    border-left-color: var(--warn);
+    background: var(--warn-soft);
+}
+
+.callout--warn .callout__title {
+    color: var(--warn) !important;
+}
+
+.callout--danger {
+    border-left-color: var(--danger);
+    background: var(--danger-soft);
+}
+
+.callout--danger .callout__title {
+    color: var(--danger) !important;
+}
+
+.callout--ok {
+    border-left-color: var(--ok);
+    background: var(--ok-soft);
+}
+
+.callout--ok .callout__title {
+    color: var(--ok) !important;
+}
+
+/* --------------------------------------------------------------------------
+   STATUS CARDS
+   -------------------------------------------------------------------------- */
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 0.9rem;
+    margin: 1.1rem 0;
+}
+
+.status-card {
+    padding: 1.15rem 1.25rem;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+}
+
+.status-card h3 {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-strong);
+}
+
+.status-card p {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.status-card--ok {
+    border-color: color-mix(in srgb, var(--ok) 40%, transparent);
+    background: var(--ok-soft);
+}
+
+.status-card--ok h3 {
+    color: var(--ok);
+}
+
+.status-card--danger {
+    border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+    background: var(--danger-soft);
+}
+
+.status-card--danger h3 {
+    color: var(--danger);
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+    .docs-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* The sticky column collapses to a horizontal chip row on narrow screens */
+    .docs-nav {
+        position: static;
+        display: block;
+        padding: 1rem;
+    }
+
+    .docs-nav__title {
+        margin-top: 0.9rem;
+    }
+
+    .docs-nav__title:first-child {
+        margin-top: 0;
+    }
+
+    .docs-nav__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+    }
+
+    .docs-nav__list a {
+        border-left: 0;
+        border: 1px solid var(--line);
+        font-size: 0.8rem;
+    }
+
+    .docs-nav__list a.is-active {
+        border-color: var(--accent-line);
+    }
+}
+
+@media (max-width: 620px) {
+    .docs-section {
+        padding: 1.25rem;
+    }
+}

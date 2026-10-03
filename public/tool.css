@@ -1,0 +1,330 @@
+/* ==========================================================================
+   PROJECT CYBER VIGILANTEEM — MODULE PAGE SCAFFOLDING
+   Shared layout for the individual tool pages. Depends on theme.css tokens.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   PAGE HEADER
+   -------------------------------------------------------------------------- */
+
+.tool-head {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.tool-head__title {
+    margin-bottom: 0.65rem;
+    font-size: clamp(1.6rem, 1.2rem + 1.7vw, 2.35rem);
+    letter-spacing: -0.015em;
+}
+
+.tool-head__lead {
+    max-width: 68ch;
+    color: var(--text-dim);
+    font-size: 0.98rem;
+}
+
+.tool-head__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   SCAN FORM
+   -------------------------------------------------------------------------- */
+
+.scan-form__hint {
+    margin-top: 0.7rem;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+}
+
+/* Selectable group of targets, e.g. what-web / docs anchor jumps.
+   Sized to clear the 32px minimum target height. */
+.scan-form__presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.9rem;
+}
+
+.preset-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.preset-chip:hover {
+    border-color: var(--accent-line);
+    color: var(--accent);
+    background: var(--accent-softer);
+}
+
+/* --------------------------------------------------------------------------
+   RESULTS
+   -------------------------------------------------------------------------- */
+
+.result {
+    margin-top: 1.25rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+}
+
+.result--ok {
+    border-color: color-mix(in srgb, var(--ok) 40%, transparent);
+    border-left-color: var(--ok);
+    background: var(--ok-soft);
+}
+
+.result--danger {
+    border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+    border-left-color: var(--danger);
+    background: var(--danger-soft);
+}
+
+.result--warn {
+    border-color: color-mix(in srgb, var(--warn) 40%, transparent);
+    border-left-color: var(--warn);
+    background: var(--warn-soft);
+}
+
+.result__headline {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+    font-size: 1.08rem;
+    font-weight: 700;
+}
+
+.result--ok .result__headline {
+    color: var(--ok);
+}
+
+.result--danger .result__headline {
+    color: var(--danger);
+}
+
+.result--warn .result__headline {
+    color: var(--warn);
+}
+
+.result__body {
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.result__list {
+    margin: 0.85rem 0 0;
+    padding-left: 1.1rem;
+    list-style: square;
+    font-size: 0.86rem;
+    color: var(--text-dim);
+}
+
+.result__list strong {
+    color: var(--text-strong);
+    font-weight: 600;
+}
+
+.result__footnote {
+    margin-top: 0.9rem;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--text-faint);
+}
+
+.result__endpoint {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    word-break: break-all;
+}
+
+/* --------------------------------------------------------------------------
+   RESEARCH REPORT PANE
+   Used by the threat research engine to stream a long-form briefing.
+   -------------------------------------------------------------------------- */
+
+.report {
+    margin-top: 1.25rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    min-height: 6rem;
+}
+
+.report:empty {
+    display: none;
+}
+
+.report__body {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.report__body:empty::before {
+    content: "Awaiting query. Submit a CVE, threat actor or hardening question above.";
+    display: block;
+    color: var(--text-faint);
+    font-size: 0.84rem;
+    white-space: normal;
+    line-height: 1.6;
+}
+
+.report__body.is-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: var(--accent);
+    white-space: normal;
+}
+
+.report__body.is-loading::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    flex: none;
+    border-radius: 50%;
+    border: 2px solid var(--accent-soft);
+    border-top-color: var(--accent);
+    animation: spin 0.75s linear infinite;
+}
+
+.report__body.is-error {
+    color: var(--danger);
+    white-space: normal;
+    padding: 1rem 1.15rem;
+    border-radius: 9px;
+    border: 1px solid color-mix(in srgb, var(--danger) 45%, transparent);
+    background: var(--danger-soft);
+}
+
+.report__body.is-error::before {
+    content: none;
+}
+
+/* --------------------------------------------------------------------------
+   NOTICE BLOCK
+   -------------------------------------------------------------------------- */
+
+.notice {
+    margin-top: 1.5rem;
+    padding: 1.35rem 1.5rem;
+    border-radius: 12px;
+    border: 1px dashed var(--line-strong);
+    background: var(--surface-2);
+}
+
+.notice__title {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--warn);
+    margin-bottom: 0.65rem;
+}
+
+.notice p {
+    font-size: 0.86rem;
+    color: var(--text-dim);
+}
+
+.notice__code {
+    display: block;
+    margin: 0.7rem 0;
+    padding: 0.6rem 0.8rem;
+    background: var(--surface-inset);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    color: var(--accent);
+    word-break: break-all;
+    background-color: var(--surface-inset);
+}
+
+.notice__note {
+    color: var(--text-faint) !important;
+    font-size: 0.8rem !important;
+}
+
+/* --------------------------------------------------------------------------
+   RELATED MODULES
+   -------------------------------------------------------------------------- */
+
+.related {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+}
+
+.related__title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+}
+
+.related__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.related__list li {
+    margin: 0;
+}
+
+.related__link {
+    display: inline-block;
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    font-size: 0.83rem;
+    color: var(--text-dim);
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.related__link:hover {
+    border-color: var(--accent-line);
+    color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 620px) {
+    .result,
+    .notice {
+        padding: 1.1rem;
+    }
+}

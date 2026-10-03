@@ -1,25 +1,102 @@
-//
-// 
-// Automatically swaps between local developer server testing ports and your Vercel URL
-const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:5500/api/geoip'
-    : '/api/geoip';
+/**
+ * Geo IP Recon Scanner — client controller
+ *
+ * Switched from the duplicated click handler + inline HTML to a form submit
+ * handler. The raw telemetry log is written as text so upstream log content
+ * is never parsed as markup, and map tiles follow the active theme.
+ */
 
-// Global variable tracker to cleanly destroy old map assets between iterative scan passes
+const BACKEND_URL = '/api/geoip';
+
+// Tracks the live map so it can be torn down cleanly between scans
 let geoMapInstance = null;
 
-async function executeGeoScan() {
-    const targetInput = document.getElementById('geoTargetInput').value.trim();
-    const logOutput = document.getElementById('geoLogOutput');
-    const mapWrapper = document.getElementById('geoMapWrapper');
-    const spinner = document.getElementById('geoSpinner');
+/** Tile sets matched to each theme so the map stays legible after a toggle. */
+const TILE_LAYERS = {
+    dark: {
+        url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+    },
+    light: {
+        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+    }
+};
 
-    if (!targetInput) {
-        alert("Please specify a target indicator IP or Domain.");
+const form = document.getElementById('geo-form');
+const targetInput = document.getElementById('geoTargetInput');
+const scanBtn = document.getElementById('geoScanBtn');
+const logOutput = document.getElementById('geoLogOutput');
+const mapWrapper = document.getElementById('geoMapWrapper');
+const spinner = document.getElementById('geoSpinner');
+
+function activeTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+}
+
+function renderMap(lat, lng, target) {
+    // Unhide before mounting so the container has a measurable size
+    mapWrapper.classList.remove('hidden');
+
+    // Leaflet is loaded from a CDN. If it is blocked, offline, or stripped by
+    // an extension, the scan itself still succeeded, so the map is optional
+    // and must never take the telemetry result down with it.
+    if (typeof L === 'undefined') {
+        console.warn('[!] Leaflet unavailable; showing coordinates without the map.');
+        const note = document.createElement('div');
+        note.className = 'alert alert--warn';
+        note.textContent = 'Map tiles could not be loaded, so the interactive view is unavailable. '
+            + 'Coordinates above are still accurate.';
+        mapWrapper.append(note);
         return;
     }
 
-    // Reset interface visibility parameters for a clean tracking pass
+    // Rebuild the section so a repeated scan does not stack notices
+    mapWrapper.querySelectorAll('.alert').forEach(function (node) { node.remove(); });
+
+    if (geoMapInstance !== null) {
+        geoMapInstance.remove();
+        geoMapInstance = null;
+    }
+
+    geoMapInstance = L.map('liveGeoMap').setView([lat, lng], 13);
+
+    const tiles = TILE_LAYERS[activeTheme()];
+    L.tileLayer(tiles.url, { attribution: tiles.attribution, maxZoom: 20 }).addTo(geoMapInstance);
+
+    const marker = L.marker([lat, lng]).addTo(geoMapInstance);
+
+    const popup = document.createElement('div');
+    const nameNode = document.createElement('b');
+    nameNode.textContent = 'TARGET: ';
+    const coordsNode = document.createElement('b');
+    coordsNode.textContent = 'COORDS: ';
+
+    popup.append(
+        nameNode, document.createTextNode(target),
+        document.createElement('br'),
+        coordsNode, document.createTextNode(lat.toFixed(5) + ', ' + lng.toFixed(5))
+    );
+
+    marker.bindPopup(popup).openPopup();
+
+    // Leaflet caches container dimensions; force a recalculation
+    setTimeout(function () {
+        if (geoMapInstance) geoMapInstance.invalidateSize();
+    }, 150);
+}
+
+async function executeGeoScan() {
+    const target = targetInput.value.trim();
+
+    if (!target) {
+        logOutput.textContent = '⚠ Specify a target IP address or domain name.';
+        logOutput.classList.remove('hidden');
+        targetInput.focus();
+        return;
+    }
+
+    scanBtn.disabled = true;
     spinner.classList.remove('hidden');
     logOutput.classList.add('hidden');
     mapWrapper.classList.add('hidden');
@@ -28,129 +105,42 @@ async function executeGeoScan() {
         const response = await fetch(BACKEND_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ target: targetInput })
+            body: JSON.stringify({ target: target })
         });
-        
+
+        if (!response.ok) {
+            throw new Error('Backend returned HTTP ' + response.status);
+        }
+
         const data = await response.json();
-        spinner.classList.add('hidden');
 
-        if (data.success) {
-            // 1. Inject the text telemetry logs
+        if (!data.success) {
+            logOutput.textContent = '⚠ Scan exception: ' + (data.error || 'no telemetry returned');
             logOutput.classList.remove('hidden');
-            logOutput.innerHTML = `[+] GEOLOCATION RESOLUTION LOGS:\n\n${data.raw_log}`;
-            
-            // 2. Parse out coordinate parameters safely
-            const lat = parseFloat(data.latitude);
-            const lng = parseFloat(data.longitude);
+            return;
+        }
 
-            // Verify coordinates are numbers and not a defaulted zero array vector
-            if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
-                
-                // CRITICAL CORRECTION: Unhide the wrapper block BEFORE mounting Leaflet
-                // This forces the browser to compile the '#liveGeoMap' container width/height dimensions.
-                mapWrapper.classList.remove('hidden');
+        logOutput.textContent = '[+] GEOLOCATION RESOLUTION LOGS:\n\n' + (data.raw_log || 'No telemetry body returned.');
+        logOutput.classList.remove('hidden');
 
-                // If a map instance already exists from a previous search, destroy it cleanly to free memory links
-                if (geoMapInstance !== null) {
-                    geoMapInstance.remove();
-                    geoMapInstance = null;
-                }
+        const lat = parseFloat(data.latitude);
+        const lng = parseFloat(data.longitude);
 
-                // Initialize Leaflet mapping layout instance directed over target parameters
-                geoMapInstance = L.map('liveGeoMap').setView([lat, lng], 13);
-
-                // Apply the dark-cyber dashboard mapping tile overlay (CartoDB DarkMatter)
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                    attribution: '&copy; <a href="https://carto.com/">CARTO</a> platform mesh',
-                    maxZoom: 20
-                }).addTo(geoMapInstance);
-
-                // Add standard tracker target marker node point
-                const marker = L.marker([lat, lng]).addTo(geoMapInstance);
-                
-                // Dynamic telemetry confirmation pop-up tracking window binding
-                marker.bindPopup(`
-                    <div style="font-family: monospace; color: #0b0c10; font-size: 12px;">
-                        <b style="color: #06b6d4;">TARGET:</b> ${targetInput}<br>
-                        <b style="color: #00ffcc;">COORDS:</b> ${lat.toFixed(5)}, ${lng.toFixed(5)}
-                    </div>
-                `).openPopup();
-
-                // Forces Leaflet to recalculate map box sizes instantly to stop grey tile rendering anomalies
-                setTimeout(() => {
-                    if (geoMapInstance) {
-                        geoMapInstance.invalidateSize();
-                    }
-                }, 150);
-            }
-        } else {
-            logOutput.classList.remove('hidden');
-            logOutput.innerHTML = `⚠️ SCAN EXCEPTION: ${data.error}`;
+        // 0/0 is the API's "unknown" sentinel, not a real coordinate
+        if (!Number.isNaN(lat) && !Number.isNaN(lng) && lat !== 0 && lng !== 0) {
+            renderMap(lat, lng, target);
         }
     } catch (err) {
+        logOutput.textContent = '⚠ Scan failed: ' + err.message;
+        logOutput.classList.remove('hidden');
+        console.error('[!] GeoIP scan failed:', err);
+    } finally {
         spinner.classList.add('hidden');
-        console.error("[!] GeoIP execution framework trace exception:", err.message);
+        scanBtn.disabled = false;
     }
 }
 
-// Ensure execution attachment listener hooks are initialized
-document.getElementById('geoScanBtn')?.addEventListener('click', executeGeoScan);
-
-
-// 
-//  // Automatically swaps between local developer server testing ports and your Vercel URL
-// const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-//     ? 'http://localhost:5500/api/geoip'
-//     : '/api/geoip';
-
-// async function executeGeoScan() {
-//     const targetInput = document.getElementById('geoTargetInput').value.trim();
-//     const logOutput = document.getElementById('geoLogOutput');
-//     const mapWrapper = document.getElementById('geoMapWrapper');
-//     const staticMap = document.getElementById('geoStaticMap');
-//     const spinner = document.getElementById('geoSpinner');
-
-//     if (!targetInput) {
-//         alert("Please specify a target indicator IP or Domain.");
-//         return;
-//     }
-
-//     // Reset interface visibility parameters
-//     spinner.classList.remove('hidden');
-//     logOutput.classList.add('hidden');
-//     mapWrapper.classList.add('hidden');
-
-//     try {
-//         const response = await fetch(BACKEND_URL, {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ target: targetInput })
-//         });
-        
-//         const data = await response.json();
-//         spinner.classList.add('hidden');
-
-//         if (data.success) {
-//             // 1. Inject the text telemetry logs
-//             logOutput.classList.remove('hidden');
-//             logOutput.innerHTML = `[+] GEOLOCATION RESOLUTION LOGS:\n\n${data.raw_log}`;
-            
-//             // 2. Map Rendering Engine Check
-//             if (data.longitude !== "0" && data.latitude !== "0") {
-//                 // Free, fast static rendering path requiring no API access keys
-//                 staticMap.src = `https://static-maps.yandex.ru/1.x/?lang=en_US&ll=${data.longitude},${data.latitude}&z=11&l=map&pt=${data.longitude},${data.latitude},pm2blm`;
-                
-//                 // Keep mapping elements hidden until image content buffer resolves to stop UI shifting
-//                 staticMap.onload = function() {
-//                     mapWrapper.classList.remove('hidden');
-//                 };
-//             }
-//         } else {
-//             logOutput.classList.remove('hidden');
-//             logOutput.innerHTML = `⚠️ SCAN EXCEPTION: ${data.error}`;
-//         }
-//     } catch (err) {
-//         spinner.classList.add('hidden');
-//         alert("Fatal error connecting to target microservice framework backend.");
-//     }
-// }
+form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    executeGeoScan();
+});

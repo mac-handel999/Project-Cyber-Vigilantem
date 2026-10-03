@@ -1,4 +1,8 @@
+// The extension talks to the Express server rather than calling providers
+// directly, so API keys stay server-side. Use the port the server prints at
+// startup; it auto-selects a free one if 5500 is taken.
 const PROXY_URL = 'http://localhost:5500/api/check-url';
+const TELEMETRY_URL = 'http://localhost:5500/api/ip-telemetry';
 
 chrome.webNavigation.onCommitted.addListener(async (details) => {
     if (details.frameId !== 0 || details.url.startsWith('chrome')) return;

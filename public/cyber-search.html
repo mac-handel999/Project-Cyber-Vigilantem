@@ -1,106 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Threat Research Engine</title>
-    <link rel="stylesheet" href="cyber-search.css">
-    <link rel="stylesheet" href="styles.css">
- 
-    <link rel="manifest" href="/manifest.json">
-    <!-- Provide theme colors for browsers that support them; include light/dark variants and a fallback for Windows tiles -->
-    <meta name="theme-color" content="#06b6d4" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#021827" media="(prefers-color-scheme: dark)">
-    <meta name="msapplication-TileColor" content="#06b6d4">
+    <meta name="description" content="AI-assisted deep research on CVEs, threat actors and TTPs using live search intelligence.">
+    <title>Threat Research Engine // Project Cyber Vigilan-Teem</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#04070f">
+    <!-- Project artwork used for browser and OS icons -->
+    <link rel="icon" href="Images/Project_Cyber-logo.png" type="image/png">
+    <link rel="icon" href="Images/Project%20Cyber%20Vigilan-Teem%20logo.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="Images/Project_Cyber-logo.png">
+    <meta name="msapplication-TileColor" content="#04070f">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="Images/Project Cyber Vigilan-Teem logo.jpg">
-    <link rel="apple-touch-icon" href="Images/Project Cyber Vigilan-Teem logo.jpg">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script src="theme-boot.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="tool.css">
 </head>
+
 <body>
-<header>
-    <div class="header">
-        <div class="logo">
-            <img class="logo-img" src="/public\Images\Project_Cyber-logo.png " alt=" Logo of P Cyber Vtem"
-                width="150px" height="150px">
-           
+    <a class="visually-hidden" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <div class="shell site-header__inner">
+            <a class="brand" href="index.html">
+                <img class="brand__mark" src="Images/Project_Cyber-logo.png" alt="Project Cyber Vigilan-Teem logo"
+                    width="46" height="46">
+                <span class="brand__text">
+                    <span class="brand__name">Cyber Vigilan-Teem</span>
+                    <span class="brand__tag">Intelligence Hub</span>
+                </span>
+            </a>
+
+            <nav class="site-nav" id="site-nav" aria-label="Primary">
+                <a class="site-nav__link" href="index.html">Home</a>
+                <a class="site-nav__link" href="cyber-search.html" aria-current="page">Threat Research</a>
+                <a class="site-nav__link" href="project.html">URL Checker</a>
+                <a class="site-nav__link" href="cyber-geo-ip.html">Recon</a>
+                <a class="site-nav__link" href="cyber-search-docs.html">Docs</a>
+            </nav>
+
+            <div class="header__actions">
+                <button class="theme-toggle" type="button" data-theme-toggle>
+                    <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                        </svg>
+                    </span>
+                    <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="4" />
+                            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+                        </svg>
+                    </span>
+                    <span class="theme-toggle__label" data-theme-label>Dark</span>
+                </button>
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation"
+                    aria-controls="site-nav" aria-expanded="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" aria-hidden="true">
+                        <path d="M3 6h18M3 12h18M3 18h18" />
+                    </svg>
+                </button>
+            </div>
         </div>
+    </header>
 
+    <main id="main" class="page">
+        <div class="shell--narrow shell">
+            <section class="tool-head">
+                <div class="tool-head__meta">
+                    <span class="badge"><span class="badge__dot"></span>AI powered</span>
+                    <span class="badge">GROQ + SERP</span>
+                </div>
+                <p class="section__eyebrow">Module 02</p>
+                <h1 class="tool-head__title">Threat Research Engine</h1>
+                <p class="tool-head__lead">
+                    Ask about a CVE, a threat actor or a defensive technique. The engine assembles live search
+                    intelligence into a structured briefing you can act on.
+                </p>
+            </section>
 
+            <section class="panel panel--glow panel--rail">
+                <form class="scan-form" id="research-form">
+                    <label class="field__label" for="query">Research query</label>
+                    <div class="field">
+                        <input class="input field__control" type="text" id="query" name="query"
+                            placeholder="CVE-2026-12345, or: APT29 TTPs" autocomplete="off" spellcheck="false">
+                        <button class="btn btn--primary" type="submit" id="research-btn">Run research</button>
+                    </div>
 
+                    <div class="scan-form__presets">
+                        <button class="preset-chip" type="button" data-query="CVE-2026-12345">CVE analysis</button>
+                        <button class="preset-chip" type="button" data-query="APT29 TTPs">Threat actor TTPs</button>
+                        <button class="preset-chip" type="button" data-query="CISA KEV catalog update">Trending alerts</button>
+                        <button class="preset-chip" type="button" data-query="How to harden Nginx against DDoS">Hardening advice</button>
+                    </div>
+                </form>
+            </section>
 
-    </div>
-    </div>
+            <section class="report" aria-live="polite">
+                <div id="output" class="report__body"></div>
+            </section>
 
-    <div class="dropdown">
-        <div class="nav-btn">
-        <div class="nav-btn-1">
-            <a href="index.html">Home</a>
+            <section class="related">
+                <p class="related__title">Related</p>
+                <ul class="related__list">
+                    <li><a class="related__link" href="project.html">URL Checker</a></li>
+                    <li><a class="related__link" href="who-is.html">WHOIS lookup</a></li>
+                    <li><a class="related__link" href="cyber-geo-ip.html">Geo IP scanner</a></li>
+                    <li><a class="related__link" href="cyber-search-docs.html">Research documentation</a></li>
+                </ul>
+            </section>
         </div>
+    </main>
 
-    <div class="nav-btn-1">
-        <a href="cyber-search-docs.html">Documentation</a>
-    </div>
+    <footer class="site-footer">
+        <div class="shell">
+            <div class="site-footer__grid">
+                <div>
+                    <p class="site-footer__heading">Threat Research Engine</p>
+                    <p class="site-footer__note">
+                        Generated briefings summarise public reporting and should be verified against primary sources before
+                        they inform a decision.
+                    </p>
+                </div>
 
+                <nav aria-label="Footer">
+                    <p class="site-footer__heading">Modules</p>
+                    <ul class="site-footer__list">
+                        <li><a href="project.html">URL checker</a></li>
+                        <li><a href="cyber-email-scanner.html">Breach scanner</a></li>
+                        <li><a href="who-is.html">WHOIS lookup</a></li>
+                        <li><a href="cyber-search-docs.html">Documentation</a></li>
+                    </ul>
+                </nav>
+            </div>
 
-    </div>
+            <div class="site-footer__bottom">
+                <small>&copy; 2026 Project Cyber Vigilan-Teem. All rights reserved.</small>
+                <span class="site-footer__contact">
+                    Educational use only &mdash;
+                    <a href="mailto:fabikechkwuemeana@gmail.com">fabikechkwuemeana@gmail.com</a>
+                </span>
+            </div>
+        </div>
+    </footer>
 
-</header>
-
-
-
-
-
-    <h2>Cyber Sec Research Engine</h2>
-
-<div class="input-section">
-    <input type="text" id="query" placeholder="Enter CVE or threat name..." data-aos="fade-right" data-aos-duration="3000">
-    <button onclick="runResearch()" data-aos="fade-left" data-aos-duration="3000">
-        <i class="fas fa-search"></i>
-    </button>
-</div>
-
-
-
-    <div id="output"  data-aos="fade-up" data-aos-duration="3000"></div>
-
-
-    <div class="footer">
-
-        <br>
-        <h3>PRODUCT OF : {FABIAN CODES HQ} || fabikechukwuemeana@gmail.com</h3> <br>
-    
-        <br>
-        <small>&copy; 2026 Project Cyber Vigilan-Teem | All rights reserved.</small>
-    </div>
-
-    <script type="text/javascript" src="cyber-search.js">
-        
-    </script>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
+    <script src="cyber-search.js"></script>
+    <script src="theme.js"></script>
     <script>
-        AOS.init();
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('service-worker.js')
+                    .catch(function (err) { console.error('[!] PWA registration fault:', err); });
+            });
+        }
     </script>
-
-
-<script>
-    // Register the service worker background layer seamlessly on application load
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                    console.log('[-] PWA Architecture Online. Scope:', registration.scope);
-                })
-                .catch((err) => {
-                    console.error('[!] PWA registration layer fault:', err);
-                });
-        });
-    }
-</script>
 </body>
 
 </html>

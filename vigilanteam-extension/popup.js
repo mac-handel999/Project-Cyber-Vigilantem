@@ -1,5 +1,7 @@
 let popupMapInstance = null;
-const IPINFO_TOKEN = "f0cb2af40db99f"; // Insert your newly created IPinfo Token here
+// Resolved from the extension's own background service worker so the token
+// never lives in the extension bundle. See background.js.
+const TELEMETRY_URL = 'http://localhost:5500/api/ip-telemetry';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Get current active browser tab coordinates/URLs parameters
@@ -31,8 +33,9 @@ async function runUrlSafetyScan(targetUrl) {
 // Full IP Telemetry Mesh Integration (The What's My IP migration sequence)
 async function runExtensionNetworkTelemetry() {
     try {
-        // Query IPinfo authenticated token mesh directly out of the extension layer context
-        const response = await fetch(`https://ipinfo.io/json?token=${IPINFO_TOKEN}`);
+        // Ask the local Express server for IP telemetry. Going through the
+        // backend keeps IPINFO_API_KEY off the client entirely.
+        const response = await fetch(TELEMETRY_URL);
         if (!response.ok) throw new Error("Handshake rejected.");
         const data = await response.json();
 

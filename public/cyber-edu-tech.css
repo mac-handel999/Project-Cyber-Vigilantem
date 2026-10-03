@@ -1,156 +1,194 @@
-body {
-    background-color: #0d1117;
-    color: #c9d1d9;
-    font-family: 'Segoe UI', sans-serif;
-    
+/* ==========================================================================
+   PROJECT CYBER VIGILANTEEM — SECURITY ROADMAP GENERATOR
+   Token-driven; the old light-mode body overrides were removed.
+   ========================================================================== */
+
+.roadmap {
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 1rem;
 }
 
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 8px;
+.roadmap:empty {
+    display: none;
 }
 
-input {
-    width: 40%;
-    padding: 12px;
-    background: #161b22;
-    border: 1px solid #30363d;
-    color: white;
-    border-radius: 4px;
-    
+/* Placeholder shown before the first generation */
+.roadmap:empty::before {
+    content: "No roadmap yet. Enter a goal above to generate one.";
+    display: block;
+    padding: 1.75rem;
+    text-align: center;
+    border: 1px dashed var(--line-strong);
+    border-radius: 12px;
+    background: var(--surface-2);
+    color: var(--text-faint);
+    font-size: 0.88rem;
 }
 
-#input-section {
-    margin: 20px auto;
-    padding: 20px;
-    gap: 10px;
-}
-
-button {
-    padding: 12px 20px;
-    background: #238636;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-}
+/* --------------------------------------------------------------------------
+   WEEK CARD
+   -------------------------------------------------------------------------- */
 
 .roadmap-item {
-    background: #161b22;
-    padding: 20px;
-    margin: 20px 0;
-    border-left: 4px solid #58a6ff;
-    border-radius: 5px;
-    transition: 0.3s;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    transition: border-color 0.25s ease, transform 0.25s ease;
 }
 
 .roadmap-item:hover {
-    transform: scale(1.02);
+    transform: translateY(-2px);
+    border-color: var(--accent-line);
+    border-left-color: var(--accent);
 }
 
 .roadmap-item h3 {
-    color: #58a6ff;
-    margin-top: 0;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.98rem;
+    letter-spacing: 0.02em;
+    color: var(--text-strong);
 }
 
-ul {
-    padding-left: 20px;
+.roadmap-item h3::before {
+    content: attr(data-week);
+    padding: 0.15rem 0.5rem;
+    border-radius: 5px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
-li {
-    margin-bottom: 8px;
-}
-
-a {
-    color: #79c0ff;
-    text-decoration: none;
-}
+/* --------------------------------------------------------------------------
+   RESOURCE GROUPS
+   -------------------------------------------------------------------------- */
 
 .resource-section {
-    background: #0d1117;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 4px;
+    margin-top: 1rem;
 }
 
 .resource-section h4 {
-    font-size: 0.9rem;
-    color: #8b949e;
-    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
 }
 
 .resource-list {
-    max-height: 200px;
+    padding: 0.75rem 1rem;
+    background: var(--surface-inset);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    max-height: 15rem;
     overflow-y: auto;
-    /* Adds a scrollbar if there are many links */
-    padding: 10px;
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 4px;
 }
 
-.delete-btn {
-    padding: 12px 20px;
-    background-color: #da3633;
-    /* A sharp red for delete */
-    color: white;
-    border: none;
+.resource-list ul {
+    padding-left: 1.1rem;
+    list-style: square;
+}
+
+.resource-list li {
+    margin-bottom: 0.45rem;
+    font-size: 0.86rem;
+    line-height: 1.5;
+}
+
+.resource-list li:last-child {
+    margin-bottom: 0;
+}
+
+.resource-list a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
+
+.resource-list a:hover {
+    color: var(--accent-hot);
+    border-bottom-color: currentColor;
+}
+
+/* --------------------------------------------------------------------------
+   COMPLETION TOGGLE
+   -------------------------------------------------------------------------- */
+
+.week-done {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
     cursor: pointer;
-    border-radius: 4px;
-    margin-left: 10px;
+    user-select: none;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
 }
 
-.delete-btn:hover {
-    background-color: #f85149;
+.week-done:hover {
+    color: var(--text-strong);
 }
 
-
-
-body { 
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    line-height: 1.6; 
-    color: #333; 
-    background-color: #f4f7f6; 
-    
-    
+.week-done input {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--accent);
+    cursor: pointer;
 }
-        
-  
- .container { 
-     max-width: 800px; 
-     margin: auto; 
-     background: white; 
-     padding: 40px; 
-     border-radius: 8px; 
-     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-     
-     
- }
-      
-      
-     h1 { 
-         
-        color: #2c3e50; 
-        border-bottom: 2px solid #58a6ff;
-        padding-bottom: 10px;
-        
-         
-     }
-      
-     h2 { 
-         
-        color: #58a6ff; 
-        margin-top: 30px; 
-         
-     }
-      
-   
-    p { 
-        
-       margin-bottom: 15px; 
-        
+
+.roadmap-item.is-complete {
+    border-left-color: var(--ok);
+}
+
+.roadmap-item.is-complete h3 {
+    color: var(--text-dim);
+    text-decoration: line-through;
+    text-decoration-color: var(--ok);
+}
+
+/* --------------------------------------------------------------------------
+   GENERATED MESSAGE
+   -------------------------------------------------------------------------- */
+
+.roadmap-message {
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    font-size: 0.9rem;
+    color: var(--text-dim);
+}
+
+.roadmap-message--error {
+    border-left-color: var(--danger);
+    background: var(--danger-soft);
+    border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+    color: var(--danger);
+}
+
+@media (max-width: 620px) {
+    .roadmap-item {
+        padding: 1.15rem;
     }
+}

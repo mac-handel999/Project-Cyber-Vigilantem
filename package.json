@@ -11,6 +11,9 @@
   "description": "Welcome to the **PROJECT CYBER VIGILAN-TEEM** repository\\! 🛡️ This project is a streamlined, core-functionality showcase of our upcoming platform, built with foundational web technologies.",
   "main": "main.js",
   "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "serve:static": "npx --yes http-server public -p 8080 -c-1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

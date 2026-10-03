@@ -1,76 +1,128 @@
-// Automatically swaps between local developer server testing ports and your Vercel URL
-const WHOIS_BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:5500/api/whois'
-    : '/api/whois';
+/**
+ * Domain & IP Ownership Trace (WHOIS) — client controller
+ *
+ * Fixes from the previous version:
+ *  - SSL status colour was set via inline style, so it ignored the theme;
+ *    it is now applied through a data-state attribute
+ *  - Errors used alert(), which blocks the page and loses context
+ *  - Missing values rendered as "undefined"
+ *  - Enter-key handling used the deprecated 'keypress' event
+ */
+
+const BACKEND_URL = '/api/whois';
+
+const form = document.getElementById('whois-form');
+const targetInput = document.getElementById('whoisTargetInput');
+const scanBtn = document.getElementById('whoisScanBtn');
+const spinner = document.getElementById('whoisSpinner');
+const resultWrapper = document.getElementById('whoisResultWrapper');
+
+const DASH = '—';
+
+function setText(id, value) {
+    const node = document.getElementById(id);
+    if (!node) return;
+    node.textContent = (value === undefined || value === null || value === '') ? DASH : String(value);
+}
+
+/** Classifies the certificate verdict so the theme can colour it. */
+function applySslState(statusText) {
+    const node = document.getElementById('resSslStatus');
+    if (!node) return;
+
+    const upper = String(statusText || '').toUpperCase();
+    if (upper.includes('NOT APPLICABLE')) {
+        node.dataset.state = 'n-a';
+    } else if (upper.includes('VALID')) {
+        node.dataset.state = 'valid';
+    } else {
+        node.dataset.state = 'invalid';
+    }
+}
+
+/* Separate element so error text never fights with the spinner markup */
+const errorBanner = document.getElementById('whoisError');
+let errorTimer = null;
+
+function showError(message) {
+    clearTimeout(errorTimer);
+    errorBanner.textContent = message;
+    errorBanner.classList.remove('hidden');
+    errorTimer = setTimeout(function () {
+        errorBanner.classList.add('hidden');
+    }, 5000);
+}
 
 async function executeWhoisTrace() {
-    const targetInput = document.getElementById('whoisTargetInput').value.trim();
-    const resultWrapper = document.getElementById('whoisResultWrapper');
-    const spinner = document.getElementById('whoisSpinner');
-    
-    if (!targetInput) {
-        alert("Please provide a valid target domain identifier layout sequence.");
+    const target = targetInput.value.trim();
+
+    if (!target) {
+        showError('Provide a valid target domain or IP address to trace.');
+        targetInput.focus();
         return;
     }
 
-    // Toggle visibility grids to loading state
+    scanBtn.disabled = true;
+    errorBanner.classList.add('hidden');
     spinner.classList.remove('hidden');
     resultWrapper.classList.add('hidden');
 
     try {
-        const response = await fetch(WHOIS_BACKEND_URL, {
+        const response = await fetch(BACKEND_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ domain: targetInput })
+            body: JSON.stringify({ domain: target })
         });
 
-        const data = await response.json();
-        spinner.classList.add('hidden');
-
-        if (data.success) {
-            // Unhide presentation view layers
-            resultWrapper.classList.remove('hidden');
-
-// Add these lines inside your successful response block 'if (data.success) { ... }'
-document.getElementById('resDomain').innerText = data.target;
-document.getElementById('resRegistrar').innerText = data.provider;
-document.getElementById('resCreated').innerText = data.created;
-document.getElementById('resExpires').innerText = data.expires;
-document.getElementById('resStatus').innerText = data.status;
-
-// Parse cryptographic evaluation matrix outputs
-const sslStatusEl = document.getElementById('resSslStatus');
-sslStatusEl.innerText = data.ssl.status;
-
-if (data.ssl.status.includes("VALID")) {
-    sslStatusEl.style.color = "#00ffcc"; // Neon Green stable flag
-    sslStatusEl.innerText += ` (${data.ssl.daysRemaining} Days Left)`;
-} else if (data.ssl.status.includes("NOT APPLICABLE")) {
-    sslStatusEl.style.color = "#64748b"; // Low emphasis grey flag for IP inputs
-} else {
-    sslStatusEl.style.color = "#ff3366"; // Alert Red flag status
-}
-
-document.getElementById('resSslIssuer').innerText = data.ssl.issuer;
-document.getElementById('resSslExpires').innerText = data.ssl.expires;
-document.getElementById('whoisRawLog').textContent = data.raw_log;
-        } else {
-            alert(`⚠️ WHOIS Resolution Error: ${data.error}`);
+        if (!response.ok) {
+            throw new Error('Backend returned HTTP ' + response.status);
         }
 
+        const data = await response.json();
+
+        if (!data.success) {
+            showError('WHOIS resolution error: ' + (data.error || 'no record returned'));
+            return;
+        }
+
+        setText('resDomain', data.target);
+        setText('resRegistrar', data.provider);
+        setText('resCreated', data.created);
+        setText('resExpires', data.expires);
+        setText('resUpdated', data.updated);
+        setText('resStatus', data.status);
+
+        setText('resNameservers', Array.isArray(data.nameservers)
+            ? data.nameservers.join('\n')
+            : data.nameservers);
+
+        const ssl = data.ssl || {};
+        const sslStatus = ssl.status || DASH;
+        setText('resSslStatus', sslStatus);
+
+        if (sslStatus !== DASH && ssl.daysRemaining !== undefined && ssl.daysRemaining !== null) {
+            document.getElementById('resSslStatus').textContent +=
+                ' (' + ssl.daysRemaining + ' days left)';
+        }
+        applySslState(sslStatus);
+
+        setText('resSslIssuer', ssl.issuer);
+        setText('resSslExpires', ssl.expires);
+
+        const rawLog = document.getElementById('whoisRawLog');
+        if (rawLog) rawLog.textContent = data.raw_log || 'No raw record returned.';
+
+        resultWrapper.classList.remove('hidden');
     } catch (err) {
+        showError('Pipeline synchronisation failed: ' + err.message);
+        console.error('[!] WHOIS request failed:', err.message);
+    } finally {
         spinner.classList.add('hidden');
-        console.error("[!] WHOIS client framework handling runtime failure:", err.message);
-        alert("Fatal error running pipeline synchronization with WHOIS microservice backplane.");
+        scanBtn.disabled = false;
     }
 }
 
-// Bind event hooks once DOM parameters resolve
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('whoisScanBtn')?.addEventListener('click', executeWhoisTrace);
-    
-    // Allow users to drop execute scans instantly by hitting 'Enter' inside the text box field
-    document.getElementById('whoisTargetInput')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') executeWhoisTrace();
-    });
+form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    executeWhoisTrace();
 });

@@ -1,0 +1,25 @@
+{
+  "short_name": "Cyber Vigilan-Teem",
+  "name": "Project Cyber Vigilan-Teem - Cybersecurity Intelligence Hub",
+  "description": "Threat research, URL safety checks, credential breach audits, GeoIP and WHOIS reconnaissance for defensive security study.",
+  "icons": [
+    {
+      "src": "Images/Project_Cyber-logo.png",
+      "type": "image/png",
+      "sizes": "500x500",
+      "purpose": "any"
+    },
+    {
+      "src": "Images/icon-maskable-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "index.html",
+  "scope": "./",
+  "background_color": "#04070f",
+  "theme_color": "#04070f",
+  "display": "standalone",
+  "orientation": "any"
+}

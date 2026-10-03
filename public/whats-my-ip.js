@@ -1,262 +1,202 @@
+/**
+ * Perimeter Recon Node (My IP telemetry) — client controller
+ *
+ * Issues found in the previous version and fixed here:
+ *  - A ~120-line commented-out duplicate of the whole implementation
+ *  - Continent was hardcoded to "Africa / AF" regardless of the real location
+ *  - Status badge colours were set with inline styles, which ignored the theme
+ *  - The map tiles were always dark, even in light mode
+ *  - Popup content was built with an innerHTML template using API values
+ */
 
+// Served by our own backend, which holds IPINFO_API_KEY server-side. The
+// token used to be hardcoded here and was readable in view-source.
+const IPINFO_ENDPOINT = '/api/ip-telemetry';
 
-// let mapInstance = null;
-
-// async function runNetworkReconnaissance() {
-//     const elements = {
-//         scanState: document.getElementById('scanState'),
-//         ipv4: document.getElementById('valIpv4'),
-//         ipv6: document.getElementById('valIpv6'),
-//         as: document.getElementById('valAs'),
-//         asName: document.getElementById('valAsName'),
-//         isp: document.getElementById('valIsp'),
-//         status: document.getElementById('valStatus'),
-//         proxy: document.getElementById('valProxy'),
-//         mobile: document.getElementById('valMobile'),
-//         hosting: document.getElementById('valHosting'),
-//         services: document.getElementById('valServices'),
-//         continent: document.getElementById('valContinent'),
-//         continentCode: document.getElementById('valContinentCode'),
-//         country: document.getElementById('valCountry'),
-//         countryCode: document.getElementById('valCountryCode'),
-//         region: document.getElementById('valRegion'),
-//         city: document.getElementById('valCity'),
-//         zip: document.getElementById('valZip'),
-//         coords: document.getElementById('valCoords'),
-//         timezone: document.getElementById('valTimezone'),
-//         currency: document.getElementById('valCurrency')
-//     };
-
-//     if (elements.scanState) {
-//         elements.scanState.innerText = "Syncing Node...";
-//         elements.scanState.style.borderColor = "#ffaa00";
-//         elements.scanState.style.color = "#ffaa00";
-//     }
-
-//     try {
-//         // Query your clean backend endpoint route (Works on local dev & production)
-//         const response = await fetch('http://localhost:5500/api/ip-telemetry' || '/api/ip-telemetry' );
-//         if (!response.ok) throw new Error("Backend infrastructure rejected request context.");
-//         const data = await response.json();
-
-//         // Map telemetry data fields safely into place
-//         if (elements.ipv4) elements.ipv4.innerText = data.ip;
-//         if (elements.ipv6) elements.ipv6.innerText = "Optimized / Tunnel Enforced";
-//         if (elements.as) elements.as.innerText = data.asNumber;
-//         if (elements.asName) elements.asName.innerText = data.asName;
-//         if (elements.isp) elements.isp.innerText = data.isp;
-//         if (elements.status) elements.status.innerText = data.status;
-//         if (elements.proxy) elements.proxy.innerText = data.proxy;
-//         if (elements.mobile) elements.mobile.innerText = data.mobile;
-//         if (elements.hosting) elements.hosting.innerText = data.hosting;
-//         if (elements.services) elements.services.innerText = data.services;
-        
-//         if (elements.continent) elements.continent.innerText = data.continent;
-//         if (elements.continentCode) elements.continentCode.innerText = data.continentCode;
-//         if (elements.country) elements.country.innerText = data.country;
-//         if (elements.countryCode) elements.countryCode.innerText = data.country;
-//         if (elements.region) elements.region.innerText = data.region; //
-//         if (elements.city) elements.city.innerText = data.city; //
-//         if (elements.zip) elements.zip.innerText = data.zip;
-//         if (elements.coords) elements.coords.innerText = `Lat/Long: ${data.loc}`; //
-//         if (elements.timezone) elements.timezone.innerText = data.timezone;
-//         if (elements.currency) elements.currency.innerText = data.currency;
-
-//         if (elements.scanState) {
-//             elements.scanState.innerText = "SECURE SYNC";
-//             elements.scanState.style.borderColor = "var(--neon-mint)";
-//             elements.scanState.style.color = "var(--neon-mint)";
-//         }
-
-//         // --- INTERACTIVE MAP RENDERING ---
-//         if (data.loc && data.loc !== "0,0") {
-//             const [latitude, longitude] = data.loc.split(',').map(coord => parseFloat(coord)); //
-
-//             if (mapInstance !== null) {
-//                 mapInstance.remove(); // Reset map canvas instance on refreshes
-//             }
-
-//             mapInstance = L.map('reconMap').setView([latitude, longitude], 12); //
-
-//             // Inject a clean dark-mode cyber mapping layer grid
-//             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-//                 attribution: '&copy; <a href="https://carto.com/">CARTO</a> data grid'
-//             }).addTo(mapInstance);
-
-//             const targetMarker = L.marker([latitude, longitude]).addTo(mapInstance); //
-//             targetMarker.bindPopup(`<b style="color: #06b6d4;">Node IP:</b> ${data.ip}<br><b style="color: #00ffcc;">Loc:</b> ${data.city}, ${data.region}`).openPopup();
-//         }
-
-//     } catch (err) {
-//         console.error("[!] Frontend interface sync exception:", err.message);
-//         if (elements.scanState) {
-//             elements.scanState.innerText = "SIGNAL RESTRICTED";
-//             elements.scanState.style.borderColor = "#ff3366";
-//             elements.scanState.style.color = "#ff3366";
-//         }
-//     }
-// }
-
-// window.addEventListener('DOMContentLoaded', runNetworkReconnaissance);
-// const refreshBtn = document.getElementById('refreshBtn') || document.getElementById('reAuthBtn');
-// if (refreshBtn) refreshBtn.addEventListener('click', runNetworkReconnaissance);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // Initialize a global map variable to cleanly manage layout reinstantiations on refresh cycles
 let mapInstance = null;
 
-async function runNetworkReconnaissance() {
-    const elements = {
-        scanState: document.getElementById('scanState'),
-        ipv4: document.getElementById('valIpv4'),
-        ipv6: document.getElementById('valIpv6'),
-        as: document.getElementById('valAs'),
-        asName: document.getElementById('valAsName'),
-        isp: document.getElementById('valIsp'),
-        status: document.getElementById('valStatus'),
-        proxy: document.getElementById('valProxy'),
-        mobile: document.getElementById('valMobile'),
-        hosting: document.getElementById('valHosting'),
-        services: document.getElementById('valServices'),
-        continent: document.getElementById('valContinent'),
-        continentCode: document.getElementById('valContinentCode'),
-        country: document.getElementById('valCountry'),
-        countryCode: document.getElementById('valCountryCode'),
-        region: document.getElementById('valRegion'),
-        city: document.getElementById('valCity'),
-        zip: document.getElementById('valZip'),
-        coords: document.getElementById('valCoords'),
-        timezone: document.getElementById('valTimezone'),
-        currency: document.getElementById('valCurrency')
-    };
+/** Tile sets matched to each theme so the map stays legible after a toggle. */
+const TILE_LAYERS = {
+    dark: {
+        url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+    },
+    light: {
+        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+    }
+};
 
-    // Replace this string with the actual API Key token from your ipinfo.io dashboard account
-    const IPINFO_TOKEN = "f0cb2af40db99f";
+/**
+ * ISO-3166 alpha-2 to continent, used instead of the previous hardcoded value.
+ * Only countries this tool is likely to encounter are listed; anything else
+ * resolves to "Unresolved" rather than a wrong answer.
+ */
+const COUNTRY_CONTINENT = {
+    NG: ['Africa', 'AF'], KE: ['Africa', 'AF'], ZA: ['Africa', 'AF'], GH: ['Africa', 'AF'],
+    EG: ['Africa', 'AF'], MA: ['Africa', 'AF'], ET: ['Africa', 'AF'], TZ: ['Africa', 'AF'],
+    US: ['North America', 'NA'], CA: ['North America', 'NA'], MX: ['North America', 'NA'],
+    GB: ['Europe', 'EU'], IE: ['Europe', 'EU'], DE: ['Europe', 'EU'], FR: ['Europe', 'EU'],
+    NL: ['Europe', 'EU'], ES: ['Europe', 'EU'], IT: ['Europe', 'EU'], SE: ['Europe', 'EU'],
+    NO: ['Europe', 'EU'], FI: ['Europe', 'EU'], DK: ['Europe', 'EU'], PL: ['Europe', 'EU'],
+    PT: ['Europe', 'EU'], RO: ['Europe', 'EU'], UA: ['Europe', 'EU'], CZ: ['Europe', 'EU'],
+    IN: ['Asia', 'AS'], CN: ['Asia', 'AS'], JP: ['Asia', 'AS'], KR: ['Asia', 'AS'],
+    SG: ['Asia', 'AS'], AE: ['Asia', 'AS'], SA: ['Asia', 'AS'], IL: ['Asia', 'AS'],
+    TR: ['Asia', 'AS'], RU: ['Europe', 'AS'], AU: ['Oceania', 'OC'], NZ: ['Oceania', 'OC']
+};
 
-    if (elements.scanState) {
-        elements.scanState.innerText = "Syncing Node...";
-        elements.scanState.style.borderColor = "#ffaa00";
-        elements.scanState.style.color = "#ffaa00";
+const FIELDS = {
+    scanState: document.getElementById('scanState'),
+    ipv4: document.getElementById('valIpv4'),
+    ipv6: document.getElementById('valIpv6'),
+    as: document.getElementById('valAs'),
+    asName: document.getElementById('valAsName'),
+    isp: document.getElementById('valIsp'),
+    status: document.getElementById('valStatus'),
+    proxy: document.getElementById('valProxy'),
+    mobile: document.getElementById('valMobile'),
+    hosting: document.getElementById('valHosting'),
+    services: document.getElementById('valServices'),
+    continent: document.getElementById('valContinent'),
+    continentCode: document.getElementById('valContinentCode'),
+    country: document.getElementById('valCountry'),
+    countryCode: document.getElementById('valCountryCode'),
+    region: document.getElementById('valRegion'),
+    city: document.getElementById('valCity'),
+    zip: document.getElementById('valZip'),
+    coords: document.getElementById('valCoords'),
+    timezone: document.getElementById('valTimezone'),
+    currency: document.getElementById('valCurrency')
+};
+
+const refreshBtn = document.getElementById('refreshBtn');
+
+function setField(node, value) {
+    if (!node) return;
+    node.textContent = value;
+    // Populated fields get full-contrast styling; placeholders stay muted
+    node.classList.remove('metrics__value--muted');
+}
+
+function setState(text, tone) {
+    if (!FIELDS.scanState) return;
+    FIELDS.scanState.textContent = text;
+    FIELDS.scanState.parentElement.className = 'badge badge--live' +
+        (tone === 'ok' ? ' badge--ok' : tone === 'danger' ? ' badge--danger' : ' badge--warn');
+}
+
+function activeTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+}
+
+function renderMap(lat, lng, ip, city, region) {
+    if (mapInstance !== null) {
+        mapInstance.remove();
+        mapInstance = null;
     }
 
+    mapInstance = L.map('reconMap').setView([lat, lng], 12);
+
+    const tiles = TILE_LAYERS[activeTheme()];
+    L.tileLayer(tiles.url, { attribution: tiles.attribution, maxZoom: 20 }).addTo(mapInstance);
+
+    const popup = document.createElement('div');
+    const ipNode = document.createElement('b');
+    ipNode.textContent = 'NODE IP: ';
+    const locNode = document.createElement('b');
+    locNode.textContent = 'LOC: ';
+
+    popup.append(
+        ipNode, document.createTextNode(ip),
+        document.createElement('br'),
+        locNode, document.createTextNode([city, region].filter(Boolean).join(', '))
+    );
+
+    L.marker([lat, lng]).addTo(mapInstance).bindPopup(popup).openPopup();
+
+    setTimeout(function () {
+        if (mapInstance) mapInstance.invalidateSize();
+    }, 150);
+}
+
+async function runNetworkReconnaissance() {
+    if (refreshBtn) refreshBtn.disabled = true;
+    setState('Syncing node...', 'warn');
+
     try {
-        // Fetch authenticated telemetry profile from IPinfo with token routing validation
-        const response = await fetch(`https://ipinfo.io/json?token=${IPINFO_TOKEN}`);
-        if (!response.ok) throw new Error("Authenticated node token handshake rejected.");
+        const response = await fetch(IPINFO_ENDPOINT);
+        if (!response.ok) {
+            const detail = await response.json().catch(() => ({}));
+            throw new Error(detail.error || 'IP telemetry request failed (HTTP ' + response.status + ').');
+        }
+
         const data = await response.json();
 
-        // Parse out ASN structures cleanly (e.g., split "AS12345 Globacom Limited")
-        let asnNumber = "Unavailable";
-        let asnCompany = "Unknown AS Entity Pool";
+        // "AS15169 Google LLC" → number and entity name
+        let asnNumber = 'Unavailable';
+        let asnCompany = 'Unknown AS entity';
         if (data.org) {
-            const orgParts = data.org.split(' ');
-            asnNumber = orgParts[0]; 
-            asnCompany = orgParts.slice(1).join(' '); 
+            const parts = data.org.split(' ');
+            asnNumber = parts.shift();
+            asnCompany = parts.join(' ') || 'Unknown AS entity';
         }
 
-        // Map responses out of your token payload straight to UI fields
-        if (elements.ipv4) elements.ipv4.innerText = data.ip || "Undetected";
-        if (elements.ipv6) elements.ipv6.innerText = "Optimized / Tunnel Enforced";
-        
-        if (elements.as) elements.as.innerText = asnNumber;
-        if (elements.asName) elements.asName.innerText = asnCompany;
-        if (elements.isp) elements.isp.innerText = asnCompany; 
-        if (elements.status) elements.status.innerText = "SUCCESS (Token Authenticated Mesh)";
+        setField(FIELDS.ipv4, data.ip || 'Undetected');
+        setField(FIELDS.ipv6, 'Not reported by provider');
+        setField(FIELDS.as, asnNumber);
+        setField(FIELDS.asName, asnCompany);
+        setField(FIELDS.isp, asnCompany);
+        setField(FIELDS.status, 'Token authenticated');
 
-        // Infrastructure and Security Analysis
         const lowerOrg = (data.org || '').toLowerCase();
-        const isCloudOrHosting = lowerOrg.includes('amazon') || lowerOrg.includes('google') || lowerOrg.includes('microsoft') || lowerOrg.includes('hosting') || lowerOrg.includes('digitalocean');
-        
-        if (elements.proxy) elements.proxy.innerText = "Clear Connection Path"; 
-        if (elements.mobile) elements.mobile.innerText = isCloudOrHosting ? "Fixed Line Node" : "Mobile / Cellular Broadband Link";
-        if (elements.hosting) elements.hosting.innerText = isCloudOrHosting ? "Data Center / Hosting Infra" : "Residential Deployment Asset";
-        
-        if (elements.services) {
-            elements.services.innerText = isCloudOrHosting ? "Cloud Hosting Routing Center" : "Standard Broadband Network Node";
-        }
+        const isDatacentre = ['amazon', 'google', 'microsoft', 'hosting', 'digitalocean', 'ovh', 'linode']
+            .some(function (needle) { return lowerOrg.includes(needle); });
 
-        // Geographic Matrix Alignment Configuration
-        if (elements.continent) elements.continent.innerText = "Africa"; // Structural context default alignment
-        if (elements.continentCode) elements.continentCode.innerText = "AF";
-        if (elements.country) elements.country.innerText = data.country || "Unavailable";
-        if (elements.countryCode) elements.countryCode.innerText = data.country || "Unavailable";
-        if (elements.region) elements.region.innerText = data.region || "Unavailable";
-        if (elements.city) elements.city.innerText = data.city || "Unavailable";
-        if (elements.zip) elements.zip.innerText = data.postal || "Not applicable";
-        if (elements.coords) elements.coords.innerText = data.loc ? `Lat/Long: ${data.loc}` : "Unavailable";
-        
-        if (elements.timezone) elements.timezone.innerText = data.timezone || "Unavailable";
-        if (elements.currency) elements.currency.innerText = "Local Unit Account"; 
+        setField(FIELDS.proxy, 'Clear connection path');
+        setField(FIELDS.mobile, isDatacentre ? 'Fixed line node' : 'Mobile / broadband link');
+        setField(FIELDS.hosting, isDatacentre ? 'Data centre / hosting' : 'Residential deployment');
+        setField(FIELDS.services, isDatacentre ? 'Cloud hosting routing' : 'Standard broadband node');
 
-        // Update main status badge to verified state
-        if (elements.scanState) {
-            elements.scanState.innerText = "SECURE SYNC";
-            elements.scanState.style.borderColor = "var(--neon-mint)";
-            elements.scanState.style.color = "var(--neon-mint)";
-        }
+        const countryCode = data.country || '';
+        const continent = COUNTRY_CONTINENT[countryCode];
 
-        // --- MAP RENDERING ENGINE LOOP ---
-        if (data.loc) {
-            // Split out "latitude,longitude" coordinates safely
-            const [latitude, longitude] = data.loc.split(',').map(coord => parseFloat(coord));
+        setField(FIELDS.continent, continent ? continent[0] : 'Unresolved');
+        setField(FIELDS.continentCode, continent ? continent[1] : '--');
+        setField(FIELDS.country, data.country || 'Unavailable');
+        setField(FIELDS.countryCode, countryCode || 'Unavailable');
+        setField(FIELDS.region, data.region || 'Unavailable');
+        setField(FIELDS.city, data.city || 'Unavailable');
+        setField(FIELDS.zip, data.postal || 'Not applicable');
+        setField(FIELDS.coords, data.loc ? data.loc : 'Unavailable');
+        setField(FIELDS.timezone, data.timezone || 'Unavailable');
+        setField(FIELDS.currency, 'Not reported by provider');
 
-            // Safely tear down old maps if users hit the 'Refresh' link to prevent dual rendering engine locks
-            if (mapInstance !== null) {
-                mapInstance.remove();
+        setState('Secure sync', 'ok');
+
+        if (data.loc && data.loc !== '0,0') {
+            const parts = data.loc.split(',').map(parseFloat);
+            if (!Number.isNaN(parts[0]) && !Number.isNaN(parts[1])) {
+                renderMap(parts[0], parts[1], data.ip || '', data.city || '', data.region || '');
             }
-
-            // Create Leaflet target window view centered directly over target node coordinates
-            mapInstance = L.map('reconMap').setView([latitude, longitude], 12);
-
-            // Inject a dark cyber-grid tile map layout skin (CartoDB DarkMatter theme)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://carto.com/">CARTO</a> data mesh',
-                maxZoom: 20
-            }).addTo(mapInstance);
-
-            // Drop a clean, tracking node marker directly over the location coordinate point
-            const targetMarker = L.marker([latitude, longitude]).addTo(mapInstance);
-            targetMarker.bindPopup(`<b style="color: #06b6d4;">Node IP:</b> ${data.ip}<br><b style="color: #00ffcc;">Loc:</b> ${data.city}, ${data.region}`).openPopup();
         }
-
     } catch (err) {
-        console.error("[!] Authenticated reconnaissance transit failure:", err.message);
-        if (elements.scanState) {
-            elements.scanState.innerText = "TOKEN ERROR";
-            elements.scanState.style.borderColor = "#ff3366";
-            elements.scanState.style.color = "#ff3366";
-        }
-        
-        Object.keys(elements).forEach(key => {
-            if (key !== 'scanState' && elements[key]) {
-                elements[key].innerText = "Signal Restricted";
+        setState('Signal restricted', 'danger');
+
+        Object.keys(FIELDS).forEach(function (key) {
+            if (key !== 'scanState' && FIELDS[key]) {
+                FIELDS[key].textContent = 'Signal restricted';
+                FIELDS[key].classList.add('metrics__value--muted');
             }
         });
+
+        console.error('[!] Perimeter recon failed:', err.message);
+    } finally {
+        if (refreshBtn) refreshBtn.disabled = false;
     }
 }
 
-// Attach listeners to initialize the application pipeline
 window.addEventListener('DOMContentLoaded', runNetworkReconnaissance);
 
-const refreshBtn = document.getElementById('refreshBtn') || document.getElementById('reAuthBtn');
 if (refreshBtn) {
     refreshBtn.addEventListener('click', runNetworkReconnaissance);
 }

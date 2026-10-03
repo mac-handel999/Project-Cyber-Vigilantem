@@ -4,383 +4,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="P Cyber Vtem, home, website, cyber security, technology">
-    <meta name="author" content="fabian codes hq, emeana ikechukwu fabian, fabian,emeana,ikechukwu,fabian codes">
-    <link rel="stylesheet" href="styles.css">
+    <meta name="keywords" content="Project Cyber Vigilan-Teem, cybersecurity intelligence, OSINT, threat research, URL checker, breach scanner, GeoIP">
+    <meta name="description" content="Project Cyber Vigilan-Teem is a cybersecurity intelligence hub: threat research, URL safety checks, breach lookups, GeoIP and WHOIS reconnaissance tooling.">
+    <meta name="author" content="Fabian Codes HQ">
 
-    <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#06b6d4">
-    <meta name="msapplication-navbutton-color" content="#06b6d4">
+    <title>Project Cyber Vigilan-Teem // Cybersecurity Intelligence Hub</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#04070f">
+    <!-- Project artwork used for browser and OS icons -->
+    <link rel="icon" href="Images/Project_Cyber-logo.png" type="image/png">
+    <link rel="icon" href="Images/Project%20Cyber%20Vigilan-Teem%20logo.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="Images/Project_Cyber-logo.png">
+    <meta name="msapplication-TileColor" content="#04070f">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="/Images/Project Cyber Vigilan-Teem logo.jpg">
-    <link rel="apple-touch-icon" href="/Images/Project Cyber Vigilan-Teem logo.jpg">
-    <title>Project Cyber Vigilan-Teem/#home</title>
 
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Applies the stored theme before first paint -->
+    <script src="theme-boot.js"></script>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <header>
-        <div class="header">
-            <div class="logo">
-                <img class="logo-img" src="/public\Images\Project_Cyber-logo.png" alt=" Logo of P Cyber Vtem"
-                    width="150px" height="150px">
-               
+    <a class="visually-hidden" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <div class="shell site-header__inner">
+            <a class="brand" href="index.html">
+                <img class="brand__mark" src="Images/Project_Cyber-logo.png" alt="Project Cyber Vigilan-Teem logo"
+                    width="46" height="46">
+                <span class="brand__text">
+                    <span class="brand__name">Cyber Vigilan-Teem</span>
+                    <span class="brand__tag">Intelligence Hub</span>
+                </span>
+            </a>
+
+            <nav class="site-nav" id="site-nav" aria-label="Primary">
+                <a class="site-nav__link" href="index.html" aria-current="page">Home</a>
+                <a class="site-nav__link" href="cyber-search.html">Threat Research</a>
+                <a class="site-nav__link" href="project.html">URL Checker</a>
+                <a class="site-nav__link" href="cyber-geo-ip.html">Recon</a>
+                <a class="site-nav__link" href="cyber-search-docs.html">Docs</a>
+            </nav>
+
+            <div class="header__actions">
+                <button class="theme-toggle" type="button" data-theme-toggle>
+                    <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                        </svg>
+                    </span>
+                    <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="4" />
+                            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+                        </svg>
+                    </span>
+                    <span class="theme-toggle__label" data-theme-label>Dark</span>
+                </button>
+                <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open navigation"
+                    aria-controls="site-nav" aria-expanded="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" aria-hidden="true">
+                        <path d="M3 6h18M3 12h18M3 18h18" />
+                    </svg>
+                </button>
             </div>
-
-          
-
-
         </div>
-        </div>
-
-        
-
-
-
-
-       
-
     </header>
 
-    <div class="hero-section">
-<div class="hero-section">
-    <div class="hero-content" data-aos="fade-right" data-aos-duration="3000">
-        <h1>Cybersecurity Intelligence Hub</h1>
-        <p>Proactive protection and real-time threat intelligence at your fingertips.</p>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>🔍 Cyber Sec Research Engine</h3>
-                <p>AI-powered (GROQ AI API & SERP API) deep research on CVEs, threat actors, and TTPs using real-time search intelligence.</p>
-            </div>
-
-            <div class="feature-card">
-                <h3>🛡️ Safe Browse URL Checker</h3>
-                <p>Analyzes URLs or Domain Names against Google's live Safe Browse databases to identify potential phishing, malware, and malicious
-                    infrastructure or Web sites. <br>
-                <strong><b>NOTE:</b> The Safe Browse URL Checker is now INSTALLABLE as PWA  WEB APP in CHROME BROWSER <br>  and it's now A CHROME BROWSER EXTENTION</strong>
+    <main id="main" class="page">
+        <!-- ================= HERO ================= -->
+        <section class="hero">
+            <div class="shell hero__inner">
+                <p class="hero__status">
+                    <span class="badge badge--live">
+                        <span class="badge__dot"></span>
+                        Systems online
+                    </span>
+                    <span class="hero__status-text">9 reconnaissance modules active</span>
                 </p>
-            </div>
 
+                <h1 class="hero__title">Cybersecurity <span class="hero__accent">Intelligence Hub</span></h1>
 
-
-            <div class="feature-card">
-                <h3>🔍 Cyber Sec Roadmaps & Courses Ai Seach</h3>
-                <p>AI-powered (GROQ AI API & SERP API) deep research on cyber security roadmaps, YouTube videos, <br>
-                     and Cyber Sec edutech platforms; with a 26 (or less) week long roadmaps and resourses.</p>
-            </div>
-
-
-            <div class="feature-card">
-                <h3>🛡️ Cyber Sec Tech Resources</h3>
-                <p>Access a comprehensive library of cybersecurity tools, guides, and educational materials.</p>
-            </div>
-            
-
-            <div class="feature-card">
-                <h3>🔍 E-mail / Username Data Breach Scanner</h3>
-                <p>Scans Inputed E-mail or Username against the 
-                    <strong>LEAK CHECK</strong>, databases of leaked e-mail and username credentials involved in a databreach.</p>
-            </div>
-            
-            <div class="feature-card">
-                <h3>🛡️ Geo IP / Domain Name Scanner</h3>
-                <p>Scans Inputed IP Address or Domain Name against 
-                <strong>HACKER TARGET</strong>, which does a Reconnisance scan and returns info about the target, <br>
-                Like: ISP Geo Location, IP (if it's a Domain name scan), Country, State, City, Longitude, Latitude, 
-                <br> and a Mini Map View of the Target's ISP Location .</p>
-            </div>
-
-
-            <div class="feature-card">
-                <h3>🔍 What Is My IP Address Auto Scanner</h3>
-                <p>Auto Scans Your Internet Connection against the 
-                    <strong>Free IP API.com & IP API.com</strong>, Live databases and Displays Your Network's <br>
-                    ISP,IPV4 Address, Country, Region and many more.
+                <p class="hero__lead">
+                    Proactive protection and real-time threat intelligence at your fingertips. Audit infrastructure,
+                    trace threat actors and hunt for exposed credentials from a single console.
                 </p>
-            </div>
 
-            <div class="feature-card">
-                <h3>🛡️ What Web Scanner</h3>
-                <p>WhatWeb recognises web technologies including <br> content management systems (CMS), blogging platforms, analytics packages,
-                JavaScript libraries, web servers, and embedded devices. <br> It can identify versions, framework modules, SQL errors, email
-                addresses and more.
-                </p>
-            </div>
-
-
-            <div class="feature-card">
-                <h3>🔍 Who Is (Domain & IP) Scanner</h3>
-                <p>
-                    <strong>WHOIS</strong> is a standard network protocol used to look up the public registration data and ownership
-                    "birth certificate" of a domain name or IP address. In cybersecurity operations, analysts use it as an essential
-                    <strong>OSINT (Open-Source Intelligence)</strong> reconnaissance tool to audit network infrastructure allocations,
-                    verify domain age to detect new phishing threats, track expiration timelines, and assess <strong>SSL certificate
-                        status</strong> parameters.
-                </p>
-            </div>
-
-            </div><br>
-
-
-<h2><strong><b>NOTE:</b> The Safe Browse URL Checker is now INSTALLABLE as a PWA WEB APP or Mobile APP in CHROME BROWSER <br> and it's
-        now A
-        CHROME BROWSER EXTENTION</strong></h2>
-
-            <br>
-            <h3>PRODUCT OF : <br>
-                 {FABIAN CODES HQ} 
-            </h2> <br>
-
-           
-        </div>
-
-        
-    </div>
-</div>
-
-    <div class="projects-section">
-       <div class="projects-display" data-aos="fade-right" data-aos-duration="3000">
-
-       <!-- <div class="project-card"> -->
-        <a href="project.html">
-          <img src="Images/url-checker-logo.png"  class="project-logo" alt="logo of safe browse url checker" width="550px" height="550px">
-           
-        <div class="project-texts">
-            <h3 style="color: #fff;">URL Checker</h3>
-        </div>
-
-        </a>
-            
-        </div>
-
-
-        
-            <div class="projects-display" data-aos="fade-left" data-aos-duration="3000">
-        
-                <!-- <div class="project-card"> -->
-                <a href="cyber-search.html">
-                    <img src="Images/cyber-search-logo.svg.png" class="project-logo" alt="logo of safe browse url checker"
-                        width="550px" height="550px">
-        
-                    <div class="project-texts">
-                    <h3 style="color: #fff;">Cyber Threat Research Engine</h3>
+                <div class="hero__actions">
+                    <a class="btn btn--primary" href="cyber-search.html">Launch research engine</a>
+                    <a class="btn btn--ghost" href="project.html">Check a URL</a>
                 </div>
-        
-                </a>
-        
-            </div>
 
-
-
-            <div class="projects-display" data-aos="fade-right" data-aos-duration="3000">
-            
-                <!-- <div class="project-card"> -->
-                <a href="cyber-edu-tech.html">
-                    <img src="Images/cyber-edu-tech-logo.png" class="project-logo" alt="logo of safe browse url checker"
-                        width="550px" height="550px">
-            
-                    <div class="project-texts">
-                        <h3 style="color: #fff;">Cyber Sec Education & Roadmaps AI</h3>
+                <dl class="hero__stats">
+                    <div class="hero__stat">
+                        <dt>Modules</dt>
+                        <dd>09</dd>
                     </div>
-            
-                </a>
-            
-            </div>
-
-
-            <div class="projects-display" data-aos="fade-left" data-aos-duration="3000">
-            
-                <!-- <div class="project-card"> -->
-                <a href="cyber-email-scanner.html">
-                    <img src="Images/email-checker-logo.png" class="project-logo" alt="logo of safe browse url checker"
-                        width="550px" height="550px">
-            
-                    <div class="project-texts">
-                        <h3 style="color: #fff;">E-mail / Username Breach Scanner</h3>
+                    <div class="hero__stat">
+                        <dt>Intel sources</dt>
+                        <dd>12</dd>
                     </div>
-            
-                </a>
-            
-            </div>
-
-            <div class="projects-display" data-aos="fade-right" data-aos-duration="3000">
-            
-                <!-- <div class="project-card"> -->
-                <a href="cyber-geo-ip.html">
-                    <img src="Images/geo-ip.svg" class="project-logo" alt="logo of safe browse url checker"
-                        width="550px" height="550px">
-            
-                    <div class="project-texts">
-                        <h3 style="color: #fff;">Geo IP / Domain Scanner</h3>
+                    <div class="hero__stat">
+                        <dt>Data residency</dt>
+                        <dd>Passive</dd>
                     </div>
-            
-                </a>
-            
+                </dl>
+            </div>
+        </section>
+
+        <!-- ================= TOOL GRID ================= -->
+        <section class="section shell" id="modules">
+            <div class="section__head" data-reveal="0">
+                <p class="section__eyebrow">Arsenal</p>
+                <h2>Reconnaissance modules</h2>
+                <p class="section__lead">
+                    Each module targets a distinct layer of the attack surface, from URL reputation to domain
+                    ownership records.
+                </p>
             </div>
 
-
-
-            <div class="projects-display" data-aos="fade-left" data-aos-duration="3000">
-            
-                <!-- <div class="project-card"> -->
-                <a href="whats-my-ip.html">
-                    <img src="Images/whats-my-ip.svg" class="project-logo" alt="logo of safe browse url checker" width="550px"
-                        height="550px">
-            
-                    <div class="project-texts">
-                        <h3 style="color: #fff;">What Is My IP Address Auto Scanner </h3>
-                    </div>
-            
+            <div class="tool-grid">
+                <a class="tool-card" href="project.html" data-reveal="0">
+                    <img class="tool-card__icon" src="Images/url-checker-logo.png" alt="Safe Browse URL Checker logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">Safe Browse URL Checker</h3>
+                    <p class="tool-card__text">
+                        Cross-references any URL or domain against Google's live Safe Browsing databases to surface
+                        phishing, malware and malicious infrastructure.
+                    </p>
+                    <span class="tool-card__cta">Run check <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">Installable</span>
                 </a>
-            
+
+                <a class="tool-card" href="cyber-search.html" data-reveal="60">
+                    <img class="tool-card__icon" src="Images/cyber-search-logo.svg.png" alt="Threat Research Engine logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">Threat Research Engine</h3>
+                    <p class="tool-card__text">
+                        AI-assisted deep research on CVEs, threat actors and TTPs using GROQ and live search
+                        intelligence.
+                    </p>
+                    <span class="tool-card__cta">Research <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">AI powered</span>
+                </a>
+
+                <a class="tool-card" href="cyber-edu-tech.html" data-reveal="120">
+                    <img class="tool-card__icon" src="Images/cyber-edu-tech-logo.png" alt="Education and Roadmaps logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">Education &amp; Roadmaps</h3>
+                    <p class="tool-card__text">
+                        Generates week-by-week security roadmaps with curated courses, videos and platforms for a target
+                        role or certification.
+                    </p>
+                    <span class="tool-card__cta">Build roadmap <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">AI powered</span>
+                </a>
+
+                <a class="tool-card" href="cyber-email-scanner.html" data-reveal="0">
+                    <img class="tool-card__icon" src="Images/email-checker-logo.png" alt="Credential Breach Scanner logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">Credential Breach Scanner</h3>
+                    <p class="tool-card__text">
+                        Audits an email address or username against aggregated breach archives to surface exposed
+                        credentials and their source breaches.
+                    </p>
+                    <span class="tool-card__cta">Audit identity <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">OSINT</span>
+                </a>
+
+                <a class="tool-card" href="cyber-geo-ip.html" data-reveal="60">
+                    <img class="tool-card__icon" src="Images/geo-ip.svg" alt="Geo IP and Domain Scanner logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">Geo IP &amp; Domain Scanner</h3>
+                    <p class="tool-card__text">
+                        Resolves an IP or domain into ISP, country, region, city, coordinates and an interactive map of
+                        the hosting node.
+                    </p>
+                    <span class="tool-card__cta">Locate target <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">Recon</span>
+                </a>
+
+                <a class="tool-card" href="whats-my-ip.html" data-reveal="120">
+                    <img class="tool-card__icon" src="Images/whats-my-ip.svg" alt="My IP Telemetry logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">My IP Telemetry</h3>
+                    <p class="tool-card__text">
+                        Automatically profiles your own connection: IPv4 and IPv6, autonomous system, ISP, proxy and VPN
+                        status, plus a live map.
+                    </p>
+                    <span class="tool-card__cta">Scan my network <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">Installable</span>
+                </a>
+
+                <a class="tool-card" href="what-web.html" data-reveal="0">
+                    <img class="tool-card__icon" src="Images/what-web.svg" alt="WhatWeb Scanner logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">WhatWeb Scanner</h3>
+                    <p class="tool-card__text">
+                        Fingerprints web technologies: CMS platforms, JavaScript libraries, web servers, frameworks,
+                        versions and security headers.
+                    </p>
+                    <span class="tool-card__cta">Fingerprint target <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">Recon</span>
+                </a>
+
+                <a class="tool-card" href="who-is.html" data-reveal="60">
+                    <img class="tool-card__icon" src="Images/who-is.svg" alt="WHOIS Domain and IP logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">WHOIS Domain &amp; IP</h3>
+                    <p class="tool-card__text">
+                        Registration records for domains and addresses: registrar, creation and expiry dates, status
+                        flags, nameservers and SSL certificate state.
+                    </p>
+                    <span class="tool-card__cta">Trace ownership <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">OSINT</span>
+                </a>
+
+                <a class="tool-card" href="https://cyber-vtem.vercel.app/" data-reveal="120">
+                    <img class="tool-card__icon" src="Images/cyber-vTem-logo.png" alt="Security Resource Library logo" loading="lazy" decoding="async">
+                    <h3 class="tool-card__title">Security Resource Library</h3>
+                    <p class="tool-card__text">
+                        A wider library of cybersecurity tools, guides and reference material maintained alongside this
+                        hub.
+                    </p>
+                    <span class="tool-card__cta">Browse library <span aria-hidden="true">&rarr;</span></span>
+                    <span class="tag">Reference</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- ================= CAPABILITIES ================= -->
+        <section class="section">
+            <div class="shell">
+                <div class="section__head" data-reveal="0">
+                    <p class="section__eyebrow">Capabilities</p>
+                    <h2>What the hub does for you</h2>
+                </div>
+
+                <div class="cap-grid">
+                    <article class="cap-card" data-reveal="0">
+                        <span class="cap-card__index">01</span>
+                        <h3>Verify before you click</h3>
+                        <p>
+                            Reputation checks and technology fingerprinting give you a reason to trust or distrust a link
+                            before you interact with it.
+                        </p>
+                    </article>
+                    <article class="cap-card" data-reveal="80">
+                        <span class="cap-card__index">02</span>
+                        <h3>Map your exposure</h3>
+                        <p>
+                            Breach archives, WHOIS records and GeoIP data reveal which of your accounts or assets are
+                            visible to an attacker.
+                        </p>
+                    </article>
+                    <article class="cap-card" data-reveal="160">
+                        <span class="cap-card__index">03</span>
+                        <h3>Move from data to action</h3>
+                        <p>
+                            Documentation and generated roadmaps turn findings into concrete remediation steps and a
+                            learning path.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= EXTENSION / PWA ================= -->
+        <section class="section shell">
+            <div class="callout" data-reveal="0">
+                <div class="callout__head">
+                    <h2 class="callout__title">Install as an app or extension</h2>
+                    <span class="badge">PWA + Chrome extension</span>
+                </div>
+                <p>
+                    The URL Checker and My IP modules ship as an installable progressive web app for Chrome on desktop
+                    and mobile, and as a browser extension that brings both scans into the address bar. Setup
+                    instructions live in the extension repository.
+                </p>
+                <div class="callout__actions">
+                    <a class="btn btn--ghost" href="https://github.com/mac-handel999/Vigilanteam-extentions.git"
+                        rel="noopener noreferrer" target="_blank">
+                        View extension repo
+                    </a>
+                    <a class="btn btn--ghost" href="cyber-search-docs.html">Read the docs</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ATTRIBUTION ================= -->
+        <section class="section shell">
+            <div class="credits">
+                <div class="credits__block" data-reveal="0">
+                    <h2 class="credits__title">Powered by</h2>
+                    <ul class="credits__list">
+                        <li>Google Safe Browsing</li>
+                        <li>GROQ AI (Llama 3)</li>
+                        <li>Google SERP</li>
+                        <li>Google Gemini</li>
+                        <li>HackerTarget</li>
+                        <li>Free IP API</li>
+                        <li>IP-API</li>
+                        <li>LeakCheck</li>
+                        <li>RDP.org</li>
+                        <li>Leaflet &amp; CARTO</li>
+                    </ul>
+                </div>
+
+                <div class="credits__block" data-reveal="80">
+                    <h2 class="credits__title">Developed &amp; tested by</h2>
+                    <a href="https://fabiancodeshq.vercel.app"> <p class="credits__owner">Fabian Codes HQ</p> </a>
+                    <ul class="credits__contact">
+                        <li><a href="tel:+2347061652181">+234 706 165 2181</a></li>
+                        <li><a href="mailto:fabikechkwuemeana@gmail.com">fabikechkwuemeana@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell">
+            <div class="site-footer__grid">
+                <div>
+                    <p class="site-footer__heading">Project Cyber Vigilan-Teem</p>
+                    <p class="site-footer__note">
+                        Educational cybersecurity tooling for defensive study and research. Use it only against
+                        infrastructure you own or are authorised to assess.
+                    </p>
+                </div>
+
+                <nav aria-label="Footer">
+                    <p class="site-footer__heading">Modules</p>
+                    <ul class="site-footer__list">
+                        <li><a href="cyber-search.html">Threat research</a></li>
+                        <li><a href="project.html">URL checker</a></li>
+                        <li><a href="cyber-geo-ip.html">Geo IP scanner</a></li>
+                        <li><a href="who-is.html">WHOIS lookup</a></li>
+                        <li><a href="cyber-search-docs.html">Documentation</a></li>
+                    </ul>
+                </nav>
             </div>
 
-
-            <div class="projects-display" data-aos="fade-right" data-aos-duration="3000">
-            
-                <!-- <div class="project-card"> -->
-                <a href="what-web.html">
-                    <img src="Images/what-web.svg" class="project-logo" alt="logo of safe browse url checker" width="550px"
-                        height="550px">
-            
-                    <div class="project-texts">
-                        <h3 style="color: #fff;">What Web Scanner </h3>
-                    </div>
-            
-                </a>
-            
+            <div class="site-footer__bottom">
+                <small>&copy; 2026 Project Cyber Vigilan-Teem. All rights reserved.</small>
+                <span class="site-footer__contact">
+                    Educational use only &mdash;
+                    <a href="mailto:fabikechkwuemeana@gmail.com">fabikechkwuemeana@gmail.com</a>
+                </span>
             </div>
-
-
-                        <div class="projects-display" data-aos="fade-left" data-aos-duration="3000">
-                        
-                            <!-- <div class="project-card"> -->
-                            <a href="who-is.html">
-                                <img src="Images/who-is.svg" class="project-logo" alt="logo of safe browse url checker" width="550px"
-                                    height="550px">
-                        
-                                <div class="project-texts">
-                                    <h3 style="color: #fff;">Who Is Domain & IP Scanner </h3>
-                                </div>
-                        
-                            </a>
-                        
-                        </div>
-
-
-
-            <div class="projects-display" data-aos="fade-right" data-aos-duration="3000">
-            
-                <!-- <div class="project-card"> -->
-                <a href="https://cyber-vtem.vercel.app/">
-                    <img src="Images/cyber-vTem-logo.png" class="project-logo" alt="logo of safe browse url checker"
-                        width="550px" height="550px">
-            
-                    <div class="project-texts">
-                        <h3 style="color: #fff;">Cyber Sec Tech Resourses  </h3>
-                    </div>
-            
-                </a>
-            
-            </div>
-
-
-       
         </div>
-    </div><br>
+    </footer>
 
-
-    <div class="powered-by">
-        <div class="feature-card">
-            <h2>
-                <strong>
-                    <b>NOTE:</b>
-                    The Safe Browse URL Checker & What's My IP is now INSTALLABLE as a PWA WEB APP or Mobile APP in CHROME
-                    BROWSER
-                    <br>
-                    and it's now a CHROME BROWSER EXTENTION, <br>
-                    to configure and set it up, check out
-    
-                    <div class="github">
-                        <a href="https://github.com/mac-handel999/Vigilanteam-extentions.git">
-                            <button class="git">
-                                GITHUB
-                            </button>
-                        </a>
-                    </div>
-    
-    
-                </strong>
-            </h2>
-    
-        </div>
-    </div><br>
-
-
-
-<div class="powered-by">
-    <div class="feature-card">
-        <h3>🔍 POWERED BY 🛡️:</h3><br>
-        <p>
-        🛡️  GOOGLE'S SAFE BROWSE API, <br> 
-        🛡️ GROQ AI API (LLAMA 3 AI  MODEL),<br> 
-        🛡️ HACKER TARGET API,<br> 
-        🛡️ SERP GOOGLE SEARCH API, <br> 
-        🛡️ YANDEX STATIC MAP VIEW API, <br> 
-        🛡️ GOOGLE'S GEMINI AI,<br>
-        🛡️ FREE IP API.COM, <br>
-        🛡️ IP-API.COM, <br>
-        🛡️ LEAFLET LIVE MAP VIEW API,<br>
-        🛡️ CARTO.COM, <br>
-        🛡️ RDP.ORG (Registration Data Access Protocol ).
-        </p><br>
-
-        <h3>🔍 DEVELOPED & TESTED BY 🛡️:</h3><br>
-
-        <p>
-        🛡️ {FABIAN CODES HQ} || (+234-7061652181 | fabikechkwuemeana@gmail.com)🔍
-        </p>
-    </div>
-    </div><br>
-
-        <div class="footer">
-
-            <small>Disclaimer: This CYBER SEC PROJECT is intended for educational purposes only. It should not be used for any illegal
-                or unethical activities. Always respect privacy and use this tools responsibly.</small>
-            <br><br>
-
-
-            <small>&copy; 2026 Project Cyber Vigilan-Teem | All rights reserved.</small>
-
-        </div>
-            <!-- <script src="main.js"></script> -->
-
-            <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-            <script>
-                AOS.init();
-            </script>
-
-
-<script>
-    // Register the service worker background layer seamlessly on application load
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                    console.log('[-] PWA Architecture Online. Scope:', registration.scope);
-                })
-                .catch((err) => {
-                    console.error('[!] PWA registration layer fault:', err);
-                });
-        });
-    }
-</script>
+    <script src="theme.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(function (registration) {
+                        console.log('[-] PWA layer online. Scope:', registration.scope);
+                    })
+                    .catch(function (err) {
+                        console.error('[!] PWA registration fault:', err);
+                    });
+            });
+        }
+    </script>
 </body>
 
 </html>

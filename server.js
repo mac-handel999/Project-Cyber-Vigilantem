@@ -5,7 +5,38 @@ const Groq = require('groq-sdk');
 require('dotenv').config();
 
 const app = express();
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+// Keys live in the Vercel project environment. Locally they come from .env,
+// which is gitignored; see .env.example for the full list.
+const REQUIRED_KEYS = {
+    GOOGLE_SAFE_BROWSING_KEY: '/api/check-url',
+    SERP_API_KEY: '/api/research, /api/generate-roadmap',
+    GROQ_API_KEY: '/api/research, /api/generate-roadmap',
+    LEAKCHECK_API_KEY: '/api/breach-check',
+    IPINFO_API_KEY: '/api/ip-telemetry'
+};
+
+function missingKeys() {
+    return Object.entries(REQUIRED_KEYS)
+        .filter(([name]) => !process.env[name])
+        .map(([name, routes]) => `${name} (needed by ${routes})`);
+}
+
+// Construct the Groq client lazily. Constructing it at import time throws when
+// GROQ_API_KEY is absent, which killed the process before the port could bind
+// and made `npm run dev` unusable on a fresh clone.
+let groq = null;
+function getGroq() {
+    if (!groq) {
+        if (!process.env.GROQ_API_KEY) {
+            const err = new Error('GROQ_API_KEY is not configured locally.');
+            err.statusCode = 503;
+            throw err;
+        }
+        groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    }
+    return groq;
+}
 
 // Middleware Ordering
 app.use(express.json());
@@ -16,6 +47,11 @@ app.use(cors({
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Serve the frontend from the same origin so /manifest.json and
+// /service-worker.js resolve. The service worker's scope is the whole origin,
+// which requires it to be reachable at the root path.
+app.use(express.static(require('path').join(__dirname, 'public')));
 
 // Main Safe Browsing API Route
 app.post('/api/check-url', async (req, res) => {
@@ -28,6 +64,15 @@ app.post('/api/check-url', async (req, res) => {
 
     if (!finalUrl) {
         return res.status(400).json({ error: 'URL is required' });
+    }
+
+    // Fail clearly when the key is absent locally. Without this the upstream
+    // call still fires with key=undefined and surfaces as an opaque 500.
+    if (!API_KEY) {
+        return res.status(503).json({
+            error: 'GOOGLE_SAFE_BROWSING_KEY is not configured.',
+            hint: 'Add it to .env (see .env.example), or pull the Vercel values with: npx vercel env pull .env'
+        });
     }
 
     const targetUrl = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${API_KEY}`;
@@ -66,15 +111,15 @@ app.post('/api/check-url', async (req, res) => {
     }
 });
 
-const PORT = 5500; // Running precisely on your assigned network entry port vector
-app.listen(PORT, () => console.log(`[+] URL Checker Proxy active on port ${PORT}`));
-
-
-// 2. Initialize the client
-// const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+// 2. AI-assisted research endpoint
 
 app.post('/api/research', async (req, res) => {
     const { query } = req.body;
+
+    if (!query) return res.status(400).json({ error: 'A research query is required.' });
+
+    const absent = requireKeys('SERP_API_KEY', 'GROQ_API_KEY');
+    if (absent) return res.status(503).json({ error: `Missing credentials: ${absent}` });
 
     try {
         // Fetch data from SerpApi (keep this part as is)
@@ -89,7 +134,7 @@ app.post('/api/research', async (req, res) => {
         const context = searchResponse.data.organic_results.slice(0, 3).map(r => r.snippet).join('\n');
 
         // 3. Use Groq to synthesize the report
-        const chatCompletion = await groq.chat.completions.create({
+        const chatCompletion = await getGroq().chat.completions.create({
             messages: [
                 { role: "system", content: "You are a cybersecurity expert. Identify potential IOCs (Indicators of Compromise), TTPs (Tatics,Techiques, and Procedures) and recommended remediation steps from the provided context." },
                 { role: "user", content: `Analyze this threat intelligence: ${context}` }
@@ -103,15 +148,6 @@ app.post('/api/research', async (req, res) => {
         res.status(500).json({ error: "Failed to fetch research data." });
     }
 });
-
-app.listen(5500, () => console.log('Server running on http://localhost:5500'));
-
-// const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => {
-    console.log(`[Project Cyber Vigilan-teem Engine] Environment active across local routing matrix on port ${PORT}`);
-});
-
-
 
 // --- Rate Limiting Logic ---
 const cache = new Map();
@@ -134,11 +170,25 @@ app.use((req, res, next) => {
     next();
 });
 
+/**
+ * Guard for routes that need provider credentials. Returns 503 with a clear
+ * message instead of letting the request reach the upstream API with an
+ * undefined key, which produced an indistinguishable 500.
+ */
+function requireKeys(...names) {
+    const absent = names.filter((n) => !process.env[n]);
+    if (!absent.length) return null;
+    return absent.map((n) => `${n} (see .env.example, or: npx vercel env pull .env)`).join(', ');
+}
+
 // --- Roadmap Route ---
 app.post('/api/generate-roadmap', async (req, res) => {
     const { goal } = req.body;
     if (!goal) return res.status(400).json({ error: "Goal is required" });
-    
+
+    const absent = requireKeys('SERP_API_KEY', 'GROQ_API_KEY');
+    if (absent) return res.status(503).json({ error: `Missing credentials: ${absent}` });
+
     const cacheKey = goal.toLowerCase().trim();
 
     // 1. Check cache
@@ -160,7 +210,7 @@ app.post('/api/generate-roadmap', async (req, res) => {
         };
 
         // 3. AI Generation
-        const chatCompletion = await groq.chat.completions.create({
+        const chatCompletion = await getGroq().chat.completions.create({
             messages: [
                 { role: "system", content: "You are a Senior Cybersecurity Mentor. Output ONLY a valid JSON object. Format: { weeks: [{ week: number, topic: string, videos: [{title: string, link: string}], web: [{title: string, link: string}] }] }. Provide 3+ high-quality links per category." },
                 { role: "user", content: `Create an 26-week roadmap for ${goal} using these resources: ${JSON.stringify(resourcesContext)}` }
@@ -180,12 +230,6 @@ app.post('/api/generate-roadmap', async (req, res) => {
         res.status(500).json({ error: "Failed to generate roadmap." });
     }
 });
-
-app.listen(5500, () => console.log('Server running on port 5500'));
-
-
-
-
 
 //for the geo ip scanner and email breach scanner features server logic
 
@@ -228,6 +272,9 @@ app.post('/api/breach-check', async (req, res) => {
 
     if (!identity) return res.status(400).json({ error: "Missing target verification parameter." });
 
+    const absent = requireKeys('LEAKCHECK_API_KEY');
+    if (absent) return res.status(503).json({ error: `Missing credentials: ${absent}` });
+
     try {
         // Querying LeakCheck engine using your custom developer API token string
         const url = `https://leakcheck.io/api/v2/query/${encodeURIComponent(identity)}?key=${LEAKCHECK_KEY}`;
@@ -245,21 +292,19 @@ app.post('/api/breach-check', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`[+] Defensive Application Server Engine Active on: http://localhost:${PORT}`);
-});
-
 //for what web server logic
 
 app.post('/api/analyze-web', async (req, res) => {
     const { targetUrl } = req.body;
-    
+
+    if (!targetUrl) return res.status(400).json({ error: "A target URL is required." });
+
     // Extract a clean domain string
     let domain = targetUrl.replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0];
 
     try {
         // Query Microlink's public data mesh pass
-        const response = await axios.get(` https://api.duckduckgo.com/?q=https://${domain}&format=json&pretty=1`);
+        const response = await axios.get(`https://api.duckduckgo.com/?q=https://${domain}&format=json&pretty=1`);
         const meta = response.data.data;
 
         return res.json({
@@ -281,77 +326,42 @@ app.post('/api/analyze-web', async (req, res) => {
 
 //for what is my ip server logic
 
+// Trusted proxy parsing matters on Vercel/Cloudflare, where req.socket
+// reports the load balancer rather than the client.
+app.set('trust proxy', true);
 
-// Enable trusted proxy header parsing (CRITICAL for Vercel/Cloudflare deployments)
-// app.set('trust proxy', true);
+app.get('/api/ip-telemetry', async (req, res) => {
+    const token = process.env.IPINFO_API_KEY;
+    if (!token) {
+        return res.status(503).json({
+            error: 'IPINFO_API_KEY is not configured.',
+            hint: 'Add it to .env (see .env.example), or pull the Vercel values with: npx vercel env pull .env'
+        });
+    }
 
-// app.get('/api/ip-telemetry', async (req, res) => {
-//     // 1. Extract the visitor's real public IP address from Vercel's proxy chain
-//     let clientIp = req.headers['x-forwarded-for'] || 
-//                    req.headers['x-real-ip'] || 
-//                    req.socket.remoteAddress || 
-//                    '';
+    // Real client IP from the proxy chain; the socket address is only a fallback.
+    let clientIp = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || '';
+    if (clientIp.includes(',')) clientIp = clientIp.split(',')[0].trim();
+    clientIp = (clientIp || req.socket.remoteAddress || '').replace(/^::ffff:/, '');
 
-//     // Clean up proxy strings if multiple IPs are forwarded
-//     if (clientIp.includes(',')) {
-//         clientIp = clientIp.split(',')[0].trim();
-//     }
+    // Loopback has no geodata, so local development reads a fixed public node
+    // instead of returning an empty result.
+    if (clientIp === '::1' || clientIp === '127.0.0.1' || !clientIp) {
+        clientIp = '8.8.8.8';
+    }
 
-//     // Fallback test IP for local development (since ::1/127.0.0.1 returns empty geodata)
-//     if (clientIp === '::1' || clientIp === '127.0.0.1' || !clientIp) {
-//         clientIp = '197.211.52.64'; 
-//     }
-
-//     // 2. Fetch the secure backend token from process.env
-//     const token = process.env.IPINFO_API_KEY;
-
-//     try {
-//         console.log(`[+] Pulling proxy telemetry for host: ${clientIp}`);
-        
-//         // 3. Request data directly from server-side (Bypasses browser CORS completely)
-//         const response = await axios.get(`https://ipinfo.io/${clientIp}/json?token=${token}`, { timeout: 5000 });
-//         const data = response.data;
-
-//         // Parse ASN properties safely (e.g., "AS12345 Globacom Limited")
-//         let asnNumber = "Unavailable";
-//         let asnCompany = "Unknown AS Entity Pool";
-//         if (data.org) {
-//             const orgParts = data.org.split(' ');
-//             asnNumber = orgParts[0];
-//             asnCompany = orgParts.slice(1).join(' ');
-//         }
-
-//         // Determine infrastructure type flags based on organization keywords
-//         const lowerOrg = asnCompany.toLowerCase();
-//         const isCloudOrHosting = lowerOrg.includes('amazon') || lowerOrg.includes('google') || lowerOrg.includes('microsoft') || lowerOrg.includes('hosting') || lowerOrg.includes('digitalocean');
-
-//         // Send a beautifully formatted, completely populated payload to your frontend
-//         return res.json({
-//             status: "SUCCESS (Backend Envoy Gateway)",
-//             ip: data.ip || clientIp,
-//             asNumber: asnNumber,
-//             asName: asnCompany,
-//             isp: asnCompany,
-//             proxy: "Clear Connection Path",
-//             mobile: isCloudOrHosting ? "Fixed Line Node" : "Mobile / Cellular Broadband Link",
-//             hosting: isCloudOrHosting ? "Data Center / Hosting Infra" : "Residential Deployment Asset",
-//             services: isCloudOrHosting ? "Cloud Hosting Routing Center" : "Standard Broadband Network Node",
-//             continent: "Africa", 
-//             continentCode: "AF",
-//             country: data.country || "Unavailable",
-//             region: data.region || "Unavailable", // e.g., "Rivers State"
-//             city: data.city || "Unavailable", // e.g., "Nohia"
-//             zip: data.postal || "Not applicable",
-//             loc: data.loc || "0,0", // "latitude,longitude" coordinates
-//             timezone: data.timezone || "Unavailable",
-//             currency: "Local Unit Account"
-//         });
-
-//     } catch (err) {
-//         console.error(`[!] Server IP mapping exception: ${err.message}`);
-//         return res.status(500).json({ error: "Telemetry link context offline." });
-//     }
-// });
+    try {
+        // Server-side call: the token never reaches the browser.
+        const response = await axios.get(`https://ipinfo.io/${clientIp}/json`, {
+            params: { token },
+            timeout: 6000
+        });
+        res.json(response.data);
+    } catch (err) {
+        console.error(`[!] ipinfo lookup failed for ${clientIp}: ${err.message}`);
+        res.status(502).json({ error: 'Could not reach the IP telemetry provider.' });
+    }
+});
 
 
 
@@ -468,3 +478,62 @@ function checkSslCertificate(hostname) {
 
 
 module.exports = app;
+
+// Start the HTTP listener exactly once, after every route is registered.
+// `module.exports` above still lets the app be imported by tests or tooling
+// without binding a port.
+if (require.main === module) {
+    const basePort = Number(process.env.PORT) || 5500;
+    let activePort = basePort;
+    let server = null;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 20;
+
+    // VS Code's Live Server extension auto-starts on 5500, so the default port
+    // is frequently taken. Rather than fail, walk to the next free port and
+    // print it, otherwise the browser silently lands on the wrong server and
+    // every asset 404s.
+    function listen() {
+        server = app.listen(activePort);
+
+        server.on('listening', () => {
+            const note = activePort === basePort
+                ? ''
+                : `\n[note] Port ${basePort} was busy (commonly a VS Code Live Server), so this app is on ${activePort}.`;
+            console.log(`[Project Cyber Vigilan-Teem] Server active on http://localhost:${activePort}${note}`);
+
+            // List every absent key at once. On Vercel these are configured, so
+            // this only fires locally and saves hunting for them one 503 at a time.
+            const absent = missingKeys();
+            if (absent.length) {
+                console.warn(
+                    `\n[warn] ${absent.length} credential(s) not set in this environment:\n` +
+                    absent.map((k) => `         - ${k}`).join('\n') +
+                    `\n       To load the values already set on Vercel:  npx vercel env pull .env\n` +
+                    `       Or copy .env.example to .env and fill them in.\n`
+                );
+            }
+        });
+
+        server.on('error', (err) => {
+            if (err.code !== 'EADDRINUSE') {
+                console.error('[error] Server failed to start:', err.message);
+                process.exit(1);
+            }
+
+            attempts++;
+            if (attempts >= MAX_ATTEMPTS) {
+                console.error(
+                    `\n[error] Could not find a free port. Tried ${basePort}-${activePort}.\n` +
+                    `        Close whatever is holding them, or set PORT explicitly.\n`
+                );
+                process.exit(1);
+            }
+
+            activePort++;
+            listen();
+        });
+    }
+
+    listen();
+}
