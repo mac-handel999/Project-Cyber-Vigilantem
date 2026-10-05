@@ -276,19 +276,46 @@ app.post('/api/breach-check', async (req, res) => {
     if (absent) return res.status(503).json({ error: `Missing credentials: ${absent}` });
 
     try {
-        // Querying LeakCheck engine using your custom developer API token string
-        const url = `https://leakcheck.io/api/v2/query/${encodeURIComponent(identity)}?key=${LEAKCHECK_KEY}`;
-        const response = await axios.get(url);
+        const response = await axios.get(
+            `https://leakcheck.io/api/v2/query/${encodeURIComponent(identity)}`,
+            { params: { key: LEAKCHECK_KEY }, timeout: 8000 }
+        );
 
-        if (response.data.success && response.data.sources && response.data.sources.length > 0) {
-            const compiledSources = response.data.sources.map(source => source.name);
-            res.json({ breached: true, sources: compiledSources });
-        } else {
-            res.json({ breached: false, sources: [] });
-        }
+        // A clean "no breaches" reply has success:true with an empty array.
+        // Treat a missing or empty source list the same way rather than
+        // reporting it as a provider fault.
+        const sources = Array.isArray(response.data?.sources) ? response.data.sources : [];
+        res.json({
+            breached: sources.length > 0,
+            sources: sources.map((source) => source.name).filter(Boolean)
+        });
     } catch (error) {
-        console.error("LeakCheck API Connection Failure:", error.message);
-        res.status(500).json({ error: "External registry response fault." });
+        // Previously every failure collapsed into a generic 500, which hid the
+        // real cause: LeakCheck answers 400 for a rejected key, and axios
+        // throws on non-2xx, so a credential problem looked like a server fault.
+        const upstreamStatus = error.response?.status;
+        const upstreamMessage = error.response?.data?.error || error.message;
+
+        console.error(
+            `[LeakCheck] ${upstreamStatus || 'network'} error for ${identity}: ${upstreamMessage}`
+        );
+
+        if (upstreamStatus === 400 || upstreamStatus === 401 || upstreamStatus === 403) {
+            return res.status(502).json({
+                error: 'The breach database rejected the API credentials.',
+                detail: upstreamMessage,
+                hint: 'LEAKCHECK_API_KEY is set but not accepted. The v2 query endpoint requires a paid LeakCheck subscription; check the key and plan on your account.'
+            });
+        }
+
+        if (upstreamStatus === 404) {
+            return res.json({ breached: false, sources: [] });
+        }
+
+        res.status(502).json({
+            error: 'Could not reach the breach database.',
+            detail: upstreamMessage
+        });
     }
 });
 

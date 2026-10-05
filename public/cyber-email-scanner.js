@@ -101,7 +101,12 @@ async function executeBreachScan() {
         });
 
         if (!response.ok) {
-            throw new Error('Backend returned HTTP ' + response.status);
+            // Surface the server's reason instead of only the status code,
+            // which is all that made this failure hard to diagnose.
+            const detail = await response.json().catch(() => ({}));
+            const reason = detail.error || ('HTTP ' + response.status);
+            const extra = detail.hint || detail.detail;
+            throw new Error(extra ? reason + ' — ' + extra : reason);
         }
 
         const data = await response.json();
@@ -120,9 +125,9 @@ async function executeBreachScan() {
                 'No matches were returned by the breach indexes queried. Absence of a match is not a guarantee of safety.');
         }
     } catch (err) {
-        showAlert('compromised', '!',
-            'Lookup failed',
-            'The scan could not reach the breach verification proxy. Details: ' + err.message);
+        showAlert('error', '!',
+            'Lookup unavailable',
+            'The breach database could not be queried, so this result is inconclusive. Details: ' + err.message);
         console.error('[!] Breach lookup failed:', err);
     } finally {
         spinner.classList.add('hidden');

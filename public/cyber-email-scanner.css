@@ -51,6 +51,18 @@
     color: var(--danger);
 }
 
+/* Tool failure. Must not reuse .compromised: a failed lookup is not evidence
+   of exposure, and styling it red reads as an alarming "compromised" verdict. */
+.alert.error {
+    border-color: color-mix(in srgb, var(--warn) 42%, transparent);
+    border-left-color: var(--warn);
+    background: var(--warn-soft);
+}
+
+.alert.error .alert__title {
+    color: var(--warn);
+}
+
 /* --------------------------------------------------------------------------
    BREACH SOURCE MANIFEST
    -------------------------------------------------------------------------- */
